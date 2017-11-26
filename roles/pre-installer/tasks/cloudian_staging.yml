@@ -1,0 +1,8 @@
+---
+
+- name: Create Staging Directory
+  file:
+    path: "{{ staging_directory }}"
+    state: directory
+    owner: root
+    mode: 0775

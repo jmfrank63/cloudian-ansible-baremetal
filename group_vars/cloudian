@@ -1,0 +1,4 @@
+---
+# cloudian group vars
+ansible_user: root
+ansible_ssh_pass: password

@@ -1,0 +1,10 @@
+---
+
+- name: Generate cloudian-installation-key SSH key
+  shell: ssh-keygen -b 2048 -t rsa -f {{ staging_directory }}/cloudian-installation-key -q -N ''
+  args:
+    creates: "{{ staging_directory }}/cloudian-installation-key"
+
+- name: Slurp cloudian-installation-key
+  slurp: src="{{ staging_directory }}/cloudian-installation-key.pub"
+  register: cloudian_installation_key

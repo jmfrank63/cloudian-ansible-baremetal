@@ -1,0 +1,7 @@
+---
+
+- name: Disable IPtables
+  service: name=iptables state=stopped
+
+- name: Disable IPtables on boot
+  service: name=iptables enabled=no

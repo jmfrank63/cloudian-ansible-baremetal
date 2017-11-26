@@ -1,0 +1,9 @@
+# Survey file for multinode installation
+#
+# See your Cloudian HyperStore Installation Guide for
+# detailed instructions on other options that can be
+# used in this file.
+#
+{% for host in groups['cloudian'] %}
+{{ hyperstore_region }},{{ hostvars[host]['ansible_hostname'] }},{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }},{{ hyperstore_datacenter }},{{ hyperstore_rack }}
+{% endfor %}

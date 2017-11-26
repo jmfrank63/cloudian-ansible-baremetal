@@ -1,0 +1,6 @@
+---
+
+- name: Generate Survey File
+  template:
+    src: survey_csv.j2
+    dest: "{{ staging_directory }}/survey.csv"

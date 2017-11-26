@@ -1,0 +1,23 @@
+---
+
+# NOTE: the installer .bin is expected to be present under ../files
+- name: Copy Cloudian HyperStore installer
+  copy:
+    src: "{{ item }}"
+    dest: "{{ staging_directory }}"
+    mode: 0755
+  with_fileglob:
+    - "{{ role_path }}/files/CloudianHyperStore-{{ hyperstore_version }}.bin"
+
+# NOTE: the license is expected to be present under ../files
+- name: Copy Cloudian license
+  copy:
+    src: "{{ role_path }}/files/cloudian_license.lic"
+    dest: "{{ staging_directory }}"
+
+- name: Extract Installer .bin
+  shell: "cd /root/CloudianPackages/ && ./CloudianHyperStore-{{ hyperstore_version }}.bin cloudian_license.lic"
+  args:
+    chdir: "{{ staging_directory }}"
+    executable: /bin/bash
+    creates: "{{ staging_directory }}/RELEASENOTES"

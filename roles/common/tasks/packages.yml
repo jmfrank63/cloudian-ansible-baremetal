@@ -1,0 +1,21 @@
+---
+
+- name: Copy gdisk
+  copy:
+    src: gdisk-0.8.10-1.el6.x86_64.rpm
+    dest: /tmp
+
+- name: Install gdisk
+  yum:
+    name: /tmp/gdisk-0.8.10-1.el6.x86_64.rpm
+    state: present
+
+- name: Copy libselinux-python
+  copy:
+    src: libselinux-python-2.0.94-7.el6.x86_64.rpm
+    dest: /tmp
+
+- name: Install libselinux-python
+  yum:
+    name: /tmp/libselinux-python-2.0.94-7.el6.x86_64.rpm
+    state: present

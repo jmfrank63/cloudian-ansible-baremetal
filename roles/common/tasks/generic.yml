@@ -1,0 +1,7 @@
+---
+
+- name: Set env TERM
+  lineinfile:
+    path: /etc/profile.d/cloudian_set_term.sh
+    line: 'TERM=xterm'
+    create: yes

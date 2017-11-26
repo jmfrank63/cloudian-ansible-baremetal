@@ -1,0 +1,12 @@
+# static example inventory file
+# for dynamic inventory scripts see eg.
+# Foreman: https://github.com/theforeman/foreman_ansible_inventory
+# MaaS:    https://github.com/mvdkleijn/ansible-maas 
+
+[cloudian]
+cloudian-node1.example.com
+cloudian-node2.example.com
+cloudian-node3.example.com
+
+[installer-node]
+cloudian-node1.example.com

@@ -1,0 +1,5 @@
+---
+
+- import_tasks: cloudian_staging.yml
+- import_tasks: cloudian_installer.yml
+- import_tasks: cloudian_survey.yml

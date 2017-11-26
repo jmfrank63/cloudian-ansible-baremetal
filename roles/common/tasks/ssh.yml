@@ -1,0 +1,15 @@
+---
+
+- name: Modify sshd Configuration PasswordAuthentication
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication no'
+    replace: 'PasswordAuthentication yes'
+  notify: "reload sshd"
+
+- name: Modify sshd Configuration PermitRootLogin
+  replace:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin without-password'
+    replace: 'PermitRootLogin yes'
+  notify: "reload sshd"
