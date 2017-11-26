@@ -1,0 +1,8 @@
+---
+
+- name: Write out System_Setup
+  copy:
+    dest: "{{ tools_directory }}/system_setup.sh"
+    content: "{{ hostvars[hyperstore_installer_node]['system_setup']['content'] | b64decode }}"
+    owner: root
+    mode: 0750

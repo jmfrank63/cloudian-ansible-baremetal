@@ -7,5 +7,6 @@
 - import_tasks: ipv6.yml
 - import_tasks: iptables.yml
 - import_tasks: cloudian_tools.yml
+- import_tasks: deploy_systemsetup.yml
 - import_tasks: cloudian_disks.yml
 - import_tasks: cloudian_ssh.yml

@@ -1,6 +1,6 @@
 ---
 
 - name: Configure Cloudian Data Disks
-  shell: "export TERM=xterm; {{ tools_directory }}/system_setup.sh --configure-disks `lsblk  --output NAME --nodeps --noheadings | paste -d' ' -s` <<<'y'"
+  shell: "TERM=xterm {{ tools_directory }}/system_setup.sh --configure-disks `lsblk  --output NAME --nodeps --noheadings | paste -d' ' -s` <<<'y'"
   args:
     creates: "{{ tools_directory }}/fslist.txt"

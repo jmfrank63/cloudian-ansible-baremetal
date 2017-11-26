@@ -1,0 +1,5 @@
+---
+
+- name: Slurp System_Setup
+  slurp: src="{{ staging_directory }}/system_setup.sh"
+  register: system_setup

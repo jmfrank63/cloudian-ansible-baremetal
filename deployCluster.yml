@@ -2,6 +2,7 @@
 
 - hosts: installer-node
   vars:
+    hyperstore_version: "6.2.2"
     staging_directory: "/root/CloudianPackages"
   roles:
     - pre-installer
@@ -15,7 +16,6 @@
 
 - hosts: installer-node
   vars:
-    hyperstore_version: "6.2.2"
     hyperstore_region: "region-1"
     hyperstore_datacenter: "DC1"
     hyperstore_rack: "RAC1"
