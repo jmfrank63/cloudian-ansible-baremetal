@@ -10,3 +10,4 @@
 - import_tasks: deploy_systemsetup.yml
 - import_tasks: cloudian_disks.yml
 - import_tasks: cloudian_ssh.yml
+- import_tasks: setup_networking.yml

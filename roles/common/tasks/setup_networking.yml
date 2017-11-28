@@ -1,0 +1,26 @@
+---
+
+- name: Configure Bonding
+  template:
+    src: ifcfg-bond0.j2
+    dest: "{{ network_scripts_dir }}/ifcfg-bond0"
+
+- name: Setup Bonding slave1
+  template:
+    src: ifcfg-bond0_slave1.j2
+    dest: "{{ network_scripts_dir }}/ifcfg-{{ dc1_bonding_slave1 }}"
+
+- name: Setup Bonding slave2
+  template:
+    src: ifcfg-bond0_slave2.j2
+    dest: "{{ network_scripts_dir }}/ifcfg-{{ dc1_bonding_slave2 }}"
+
+- name: Setup VLAN frontend
+  template:
+    src: ifcfg-frontend_vlan.j2
+    dest: "{{ network_scripts_dir }}/ifcfg-bond0.{{ dc1_frontend_vlan }}"
+
+- name: Setup VLAN backend
+  template:
+    src: ifcfg-backend_vlan.j2
+    dest: "{{ network_scripts_dir }}/ifcfg-bond0.{{ dc1_backend_vlan }}"

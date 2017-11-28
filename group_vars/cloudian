@@ -2,3 +2,4 @@
 # cloudian group vars
 ansible_user: root
 ansible_ssh_pass: password
+network_scripts_dir: "/etc/sysconfig/network-scripts"
