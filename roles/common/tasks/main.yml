@@ -1,7 +1,7 @@
 ---
 
 - import_tasks: generic.yml
-- import_tasks: packages.yml
+#- import_tasks: packages.yml
 - import_tasks: ssh.yml
 - import_tasks: selinux.yml
 - import_tasks: ipv6.yml

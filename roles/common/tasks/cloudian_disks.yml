@@ -1,6 +1,10 @@
 ---
 
 - name: Configure Cloudian Data Disks
-  shell: "TERM=xterm {{ tools_directory }}/system_setup.sh --configure-disks `lsblk  --output NAME --nodeps --noheadings | paste -d' ' -s` <<<'y'"
+  #shell: "yes '' | TERM=xterm {{ tools_directory }}/system_setup.sh --configure-disks `lsblk  --output NAME --nodeps --noheadings | paste -d' ' -s`"
+  shell: echo
   args:
     creates: "{{ tools_directory }}/fslist.txt"
+
+- debug:
+    msg: "Placeholder. Disk formatting broken atm"

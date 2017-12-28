@@ -1,5 +1,8 @@
 ---
 
 - name: Configure BMC Networking
-  shell: "ipmitool lan set 1 ipsrc static; ipmitool lan set 1 netmask {{ 'X/24' | ipaddr('netmask') }}; ipmitool lan set 1 ipaddr {{ bmc_net }}.{{ ansible_default_ipv4.address.split('.')[3] }}; ipmitool lan set 1 defgw ipaddr {{ bmc_gateway }}"
+  shell: "ipmitool lan set 1 ipsrc static; ipmitool lan set 1 netmask {{ bmc_netmask }}; ipmitool lan set 1 ipaddr {{ bmc_net }}.{{ ansible_default_ipv4.address.split('.')[3] }}; ipmitool lan set 1 defgw ipaddr {{ bmc_gateway }}"
   when: cfg_ipmi|default(False)
+  
+- debug:
+    msg: "netmask: {{ bmc_netmask }}, address: {{ bmc_net }}.{{ ansible_default_ipv4.address.split('.')[3] }}, gateway: {{ bmc_gateway }}"

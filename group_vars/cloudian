@@ -3,3 +3,5 @@
 ansible_user: root
 ansible_ssh_pass: password
 network_scripts_dir: "/etc/sysconfig/network-scripts"
+bmc_cidr: "169.254.0.1{{ bmc_prefix }}"
+bmc_netmask: "{{ bmc_cidr | ipaddr('netmask') }}"
