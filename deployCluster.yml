@@ -1,5 +1,11 @@
 ---
 
+# TODO:
+# - support manual mapping of MAC/addr->Nodename
+# - support multiple DCs
+# - support running without installer node
+# - support adding all packages within a directory based on major OS version
+
 - hosts: installer-node
   vars:
     hyperstore_version: "7.0"
@@ -10,12 +16,6 @@
 - hosts: cloudian
   vars:
     # by default the last octet of the existing/temp. DHCP address on a node is used
-    # TODO:
-    # - support manual mapping of MAC/addr->Nodename
-    # - fix ss disk formatting issue
-    # - support multiple DCs
-    # - support running without installer node
-    # - support adding all packages within a directory based on major OS version
     net_frontend_net: "10.10.10"
     net_frontend_prefix: "/24"
     net_frontend_vlan: "10"

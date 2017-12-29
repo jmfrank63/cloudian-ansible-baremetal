@@ -1,10 +1,13 @@
 ---
 
-- name: Configure Cloudian Data Disks
-  #shell: "yes '' | TERM=xterm {{ tools_directory }}/system_setup.sh --configure-disks `lsblk  --output NAME --nodeps --noheadings | paste -d' ' -s`"
-  shell: echo
+- name: Configure Cloudian Data Disks 6
+  shell: "yes '' | TERM=xterm {{ tools_directory }}/system_setup.sh --configure-disks `lsblk  --output NAME --nodeps --noheadings | paste -d' ' -s`"
   args:
     creates: "{{ tools_directory }}/fslist.txt"
+  when: ansible_distribution_major_version == "6"
 
-- debug:
-    msg: "Placeholder. Disk formatting broken atm"
+- name: Configure Cloudian Data Disks 7
+  script: "prepDisks --format"
+  args:
+    creates: "{{ tools_directory }}/fslist.txt"
+  when: ansible_distribution_major_version == "7"

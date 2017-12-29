@@ -11,10 +11,10 @@ Ansible Playbook to deploy Cloudian HyperStore on baremetal
 - Finally run: `ansible-playbook deployCluster.yml`
 
 ## Requirements:
-- Some nodes running CentOS 6 or the latest HyperStore ISO
+- Some nodes running CentOS 6/7 or the latest HyperStore ISO
 - Ansible v2.4
 
 NOTES:
-> Still work in progress, support for automatic configuration of bonding and VLANs will be added.
+> Still work in progress, support for multiple Datacenters should be added as well as being able to run node-by-node (and separately in each DC).
 > Obviously this will work on a virtual environment as well, but is targeted for Cloudian appliances or comparable hardware.
 > For power mgmt and provisioning of the OS layer Foreman, Spacewalk+Cobbler or MaaS can be used. For all those an inventory already exists.

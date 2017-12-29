@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" != "--format" ]; then
+	echo "Usage: $0 --format"
+	echo "  Will create a single partition and formats each disk that has no existing partitions defined yet"
+	exit 2
+fi
+
+which sgdisk >/dev/null || exit 1
+
+n=1
+DEVS=($( lsblk --output NAME --nodeps --noheadings ))
+
+for dev in ${DEVS[@]}; do
+	device="/dev/${dev}"
+	dpart=${device}1
+	[[ -e ${dpart} ]] && continue
+	sgdisk -Z ${device}
+	sgdisk --new=1:2048 ${device}
+	mkfs.ext4 -q -i 8192 -m 0 -E lazy_itable_init=1,discard -O dir_index,extent,flex_bg,large_file,sparse_super,uninit_bg ${dpart}
+	mkdir /cloudian${n}
+	UUID=$( blkid -o value -s UUID ${dpart} )
+	printf 'UUID=%s\t%s\t%s\t%s\t0\t1\n' "${UUID}" "/cloudian${n}" "ext4" "defaults,rw,nosuid,noexec,nodev,noatime,data=ordered,errors=remount-ro" >> /etc/fstab
+	printf '%s\t%s\n' "${dpart}" "cloudian${n}" >> /root/CloudianTools/fslist.txt
+	let n++
+done
+
+mount -a
