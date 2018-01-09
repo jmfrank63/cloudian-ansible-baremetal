@@ -1,0 +1,5 @@
+---
+
+- name: Apply Hostname
+  hostname:
+    name: "{{ hostname_nonfqdn }}"

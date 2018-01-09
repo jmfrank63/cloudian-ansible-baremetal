@@ -1,0 +1,5 @@
+---
+
+- name: set timezone to "{{ sys_timezone }}"
+  timezone:
+    name: "{{ sys_timezone }}"

@@ -29,11 +29,11 @@
     net_bonding_slave1: "eth1"
     net_bonding_slave2: "eth2"
     tools_directory: "/root/CloudianTools"
-    hyperstore_installer_node: "{{ ansible_play_hosts | intersect(groups['installer-node']) | first }}"
     cfg_ipmi: False
     bmc_net: "10.20.20"
     bmc_prefix: "/24"
     bmc_gateway: "10.20.20.1"
+    sys_timezone: "Europe/Paris"
   roles:
     - common
     - bmc
