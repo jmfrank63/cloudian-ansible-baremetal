@@ -4,9 +4,9 @@
 # MaaS:    https://github.com/mvdkleijn/ansible-maas 
 
 [cloudian]
-cloudian-node1.example.com
-cloudian-node2.example.com
-cloudian-node3.example.com
+cloudian-node1
+cloudian-node2
+cloudian-node3
 
 [installer-node]
-cloudian-node1.example.com
+cloudian-node1
