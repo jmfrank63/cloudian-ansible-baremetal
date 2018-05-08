@@ -1,0 +1,6 @@
+---
+
+- name: Remove default eno1 configuration
+  file:
+    path: /etc/sysconfig/network-scripts/ifcfg-eno1
+    state: absent

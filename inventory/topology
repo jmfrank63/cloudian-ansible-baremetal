@@ -1,0 +1,31 @@
+# static inventory and group inheritance
+
+[cloudian]
+cloudian-node1 ansible_host=10.254.254.134
+cloudian-node2 ansible_host=10.254.254.135
+cloudian-node3 ansible_host=10.254.254.136
+
+[cloudian]
+cloudian-node1 net_frontend_addr=10.10.101.11 net_backend_addr=10.10.102.11
+cloudian-node2 net_frontend_addr=10.10.101.12 net_backend_addr=10.10.102.12
+cloudian-node3 net_frontend_addr=10.10.101.13 net_backend_addr=10.10.102.13
+
+[installer-node]
+cloudian-node1
+
+[DC1]
+cloudian-node1
+
+[DC2]
+cloudian-node2
+
+[DC3]
+cloudian-node3
+
+[region-1:children]
+DC1
+DC2
+DC3
+
+[cloudian:children]
+region-1

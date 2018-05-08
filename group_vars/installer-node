@@ -1,4 +1,0 @@
----
-
-# installer-node group vars
-staging_directory: "/root/CloudianPackages"

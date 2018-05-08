@@ -3,3 +3,8 @@
 - name: Apply Hostname
   hostname:
     name: "{{ hostname_nonfqdn }}"
+
+- name: Set Hosts entry
+  lineinfile:
+   path: /etc/hosts
+   line: "{{ net_frontend_addr }}\t{{ hostname_nonfqdn }}"

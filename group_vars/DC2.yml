@@ -1,0 +1,17 @@
+---
+
+# uncomment to override Region level configuration
+
+# Datacenter 2
+hyperstore_dc: "DC2"
+hyperstore_rack: "RAC1-2"
+#net_frontend_vlan: "201"
+#net_frontend_prefix: "/24"
+#net_backend_vlan: "202"
+#net_backend_prefix: "/24"
+#net_gateway: "10.10.201.1"
+#net_dns1: "10.10.201.1"
+#net_dns2: "10.10.201.1"
+#bmc_prefix: "/24"
+#bmc_gateway: "10.10.203.1"
+#sys_timezone: "Europe/Amsterdam"

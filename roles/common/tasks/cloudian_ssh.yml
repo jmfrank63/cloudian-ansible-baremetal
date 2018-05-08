@@ -4,4 +4,4 @@
   authorized_key:
     user: root
     state: present
-    key: "{{  hostvars[hyperstore_installer_node]['cloudian_installation_key']['content'] | b64decode }}"
+    key: "{{  hostvars[groups['installer-node'][0]]['cloudian_installation_key']['content'] | b64decode }}"

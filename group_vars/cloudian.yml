@@ -1,14 +1,10 @@
 ---
 
-# cloudian group vars
 ansible_user: root
 ansible_ssh_pass: password
 tools_directory: "/root/CloudianTools"
 network_scripts_dir: "/etc/sysconfig/network-scripts"
 hyperstore_installer_node: "{{ ansible_play_hosts | intersect(groups['installer-node']) | first }}"
 hostname_nonfqdn: "{{ inventory_hostname.split('.')[0] }}"
-net_frontend_addr: "{{ net_frontend_net }}.{{ ansible_default_ipv4.address.split('.')[3] }}"
-net_backend_addr: "{{ net_backend_net }}.{{ ansible_default_ipv4.address.split('.')[3] }}"
-bmc_addr: "{{ bmc_net }}.{{ ansible_default_ipv4.address.split('.')[3] }}"
 bmc_cidr: "169.254.0.1{{ bmc_prefix }}"
 bmc_netmask: "{{ bmc_cidr | ipaddr('netmask') }}"

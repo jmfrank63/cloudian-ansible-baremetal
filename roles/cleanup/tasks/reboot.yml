@@ -1,0 +1,4 @@
+---
+
+- name: Rebooting Node
+  command: shutdown -r +1

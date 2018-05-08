@@ -1,0 +1,4 @@
+---
+
+- import_tasks: remove_default_addr.yml
+- import_tasks: reboot.yml

@@ -1,15 +1,16 @@
 ---
 
 - import_tasks: generic.yml
-#- import_tasks: packages.yml
-- import_tasks: ssh.yml
-- import_tasks: selinux.yml
+- import_tasks: hostname.yml
+#- import_tasks: iptables.yml
 - import_tasks: ipv6.yml
-- import_tasks: iptables.yml
+- import_tasks: packages.yml
+- import_tasks: selinux.yml
+- import_tasks: setup_networking.yml
+- import_tasks: ssh.yml
+- import_tasks: timezone.yml
+
 - import_tasks: cloudian_tools.yml
-- import_tasks: deploy_systemsetup.yml
 - import_tasks: cloudian_disks.yml
 - import_tasks: cloudian_ssh.yml
-- import_tasks: hostname.yml
-- import_tasks: timezone.yml
-- import_tasks: setup_networking.yml
+- import_tasks: deploy_systemsetup.yml

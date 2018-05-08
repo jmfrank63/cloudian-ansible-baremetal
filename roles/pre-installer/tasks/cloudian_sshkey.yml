@@ -8,3 +8,7 @@
 - name: Slurp cloudian-installation-key
   slurp: src="{{ staging_directory }}/cloudian-installation-key.pub"
   register: cloudian_installation_key
+
+- set_fact:
+    cloudian_installation_key: "{{ cloudian_installation_key }}"
+    cacheable: true
