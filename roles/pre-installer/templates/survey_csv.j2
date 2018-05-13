@@ -4,6 +4,6 @@
 # detailed instructions on other options that can be
 # used in this file.
 #
-{% for host in groups['cloudian'] %}
-{{ hyperstore_region }},{{ host }},{{ hostvars[host]['net_frontend_addr'] }},{{ hostvars[host]['hyperstore_dc'] }},{{ hostvars[host]['hyperstore_rack'] }}
+{% for host in groups['cloudian']|sort %}
+{{ hyperstore_region }},{{ host }},{{ hostvars[host]['net_frontend_addr'] }},{{ hostvars[host]['hyperstore_dc'] }},{{ hostvars[host]['hyperstore_rack'] }},bond0.{{ hostvars[host]['net_backend_vlan'] }}
 {% endfor %}

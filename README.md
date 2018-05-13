@@ -31,7 +31,7 @@ NOTE:
    - `dhcp`
    - `ansible` >= 2.5
    - `python-netaddr`
- - Always first perform an `ansible-playbook` which includes the installer node. Subsequent runs can be any DC or nodes
+ - Always first perform an `ansible-playbook` which includes the installer node. Subsequent runs can be limited to any DC or nodes
 
 ## Instructions
 - Clone this repository
@@ -42,8 +42,8 @@ NOTE:
 - Customize and/or add `group_vars/DC[n].yml`
 - Customize `inventory/topology`
 - Optionally run `./node_discovery.py` (see FAQ)
-- Finally run: `ansible-playbook deployCluster.yml <options>`
-- After a batch has run successfully, you can run a cleanup: `ansible-playbook cleanup.yml` 
+- Finally run: `ansible-playbook deployCluster.yml (use `--limit` if only a selected number of nodes or DCs are reachable at any give time. See FAQ)
+- After a batch has run successfully, you can run a cleanup: `ansible-playbook cleanup.yml` (will reboot nodes into their final configuration)
 
 ## FAQ
 
@@ -53,8 +53,7 @@ Run `./node_discovery.py`:
 
 ```
  Select Datacenter:
-```
-```
+
  * dc1
    dc2
    dc3
@@ -62,8 +61,7 @@ Run `./node_discovery.py`:
 
 ```
  Watch chassis LEDs. Which node is blinking?
-```
-```
+
    cloudian-node1
    cloudian-node2
  * cloudian-node3
@@ -71,8 +69,27 @@ Run `./node_discovery.py`:
    cloudian-node5
    cloudian-node6
 ```
+```
+ * cloudian-node1
+   cloudian-node2
+   cloudian-node4
+   cloudian-node5
+   cloudian-node6
+```
 
-after identifying the nodes use it's output to update `inventory/topology` to make sure the right configuration is provisioned to the correct nodes.
+after identifying all nodes within a DC, `node_discovery.py` will output an inventory list:
+
+```
+[cloudian]
+cloudian-node1 ansible_host=10.254.254.122
+cloudian-node2 ansible_host=10.254.254.124
+cloudian-node3 ansible_host=10.254.254.121
+cloudian-node4 ansible_host=10.254.254.123
+cloudian-node5 ansible_host=10.254.254.125
+cloudian-node6 ansible_host=10.254.254.126
+```
+
+You can use that to update your `inventory/topology` to make sure the right configuration is provisioned to the correct nodes.
 
 
 > How to only run within a single Datacenter?
@@ -89,12 +106,13 @@ Eg. `ansible-playbook deployCluster.yml --limit '<hostname>'`
 
 ```
 [DC4]
-cloudian-node13
-cloudian-node14
-cloudian-node15
+cloudian-node19
+cloudian-node20
+cloudian-node21
 ```
 
-- Also add the DC to the Region:
+- Add the new nodes to the `[cloudian]` groups in the `topology` inventory as well (optionally using `node_discovery.py` to identify the nodes)
+- Also add the additional DC to the Region:
 
 ```
 [region-1:children]
@@ -115,3 +133,9 @@ DC4
 Yes. Although the static `inventory/topology` is used to define which nodes reside in which Datacenters, this information could be supplied by other inventories as well, eg. when
 using the [Foreman Ansible Inventory](https://github.com/theforeman/foreman_ansible_inventory), the right groups should be created in Foreman and attached to the provisioned nodes.
 Alternatively multiple inventories can also be combined so the static `topology` inventory is used in combination with a simple dynamic inventory only supplying group `cloudian`.
+
+> How to use the playbook to add additional nodes to an existing Cluster?
+
+The playbook has been created specifically to cover initial deployments. Depending on how (and if) it's setup to manage and control an existing cluster going forward, it should be very easy to
+add a new node: Just add it to the right groups with the temporary address taken from a provisioning subnet the node booted from. Do keep in mind that when managing a production cluster, it might
+be advisable to disable some potentially destructive tasks, like `common/cloudian_disks.yml` just to be sure.
