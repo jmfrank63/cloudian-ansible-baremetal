@@ -1,0 +1,3 @@
+---
+
+- import_tasks: blink_node.yml

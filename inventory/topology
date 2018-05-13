@@ -1,31 +1,42 @@
 # static inventory and group inheritance
 
+# Main host list. Either:
+# - set these manually OR
+# - run node_discovery.py to generate this list OR
+# - Leave empty and use another, dynamic inventory combined with this topology inventory file
 [cloudian]
-cloudian-node1 ansible_host=10.254.254.134
-cloudian-node2 ansible_host=10.254.254.135
-cloudian-node3 ansible_host=10.254.254.136
+cloudian-node1 ansible_host=10.254.254.11
+cloudian-node2 ansible_host=10.254.254.12
+cloudian-node3 ansible_host=10.254.254.13
+cloudian-node4 ansible_host=10.254.254.14
+cloudian-node5 ansible_host=10.254.254.15
+cloudian-node6 ansible_host=10.254.254.16
 
+# Set node-level configuration:
 [cloudian]
-cloudian-node1 net_frontend_addr=10.10.101.11 net_backend_addr=10.10.102.11
-cloudian-node2 net_frontend_addr=10.10.101.12 net_backend_addr=10.10.102.12
-cloudian-node3 net_frontend_addr=10.10.101.13 net_backend_addr=10.10.102.13
+cloudian-node1 net_frontend_addr=10.1.10.11 net_backend_addr=10.1.20.11 bmc_addr=10.1.30.11
+cloudian-node2 net_frontend_addr=10.1.10.12 net_backend_addr=10.1.20.12 bmc_addr=10.1.30.12
+cloudian-node3 net_frontend_addr=10.1.10.13 net_backend_addr=10.1.20.13 bmc_addr=10.1.30.13
+cloudian-node4 net_frontend_addr=10.1.10.14 net_backend_addr=10.1.20.14 bmc_addr=10.1.30.14
+cloudian-node5 net_frontend_addr=10.1.10.15 net_backend_addr=10.1.20.15 bmc_addr=10.1.30.15
+cloudian-node6 net_frontend_addr=10.1.10.16 net_backend_addr=10.1.20.16 bmc_addr=10.1.30.16
 
 [installer-node]
 cloudian-node1
 
 [DC1]
 cloudian-node1
+cloudian-node2
+cloudian-node3
 
 [DC2]
-cloudian-node2
-
-[DC3]
-cloudian-node3
+cloudian-node4
+cloudian-node5
+cloudian-node6
 
 [region-1:children]
 DC1
 DC2
-DC3
 
 [cloudian:children]
 region-1

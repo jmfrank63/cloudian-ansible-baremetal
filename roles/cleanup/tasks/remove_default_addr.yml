@@ -1,6 +1,6 @@
 ---
 
-- name: Remove default eno1 configuration
+- name: Remove default {{ provision_interface }} configuration
   file:
-    path: /etc/sysconfig/network-scripts/ifcfg-eno1
+    path: "/etc/sysconfig/network-scripts/{{ provision_interface }}"
     state: absent

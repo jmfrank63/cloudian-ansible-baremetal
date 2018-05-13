@@ -1,0 +1,6 @@
+---
+
+- hosts: cloudian
+  serial: 1
+  roles:
+    - identify

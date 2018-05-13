@@ -3,8 +3,13 @@
 ansible_user: root
 ansible_ssh_pass: password
 tools_directory: "/root/CloudianTools"
+preinstall_directory: "/etc/cloudian"
 network_scripts_dir: "/etc/sysconfig/network-scripts"
+provision_interface: "eno1"
+identify_interface: "eno2"
 hyperstore_installer_node: "{{ ansible_play_hosts | intersect(groups['installer-node']) | first }}"
 hostname_nonfqdn: "{{ inventory_hostname.split('.')[0] }}"
+net_backend_cidr: "{{ net_backend_addr }}{{ net_backend_prefix }}"
+net_backend_subnet: "{{ net_backend_cidr | ipaddr('subnet') }}"
 bmc_cidr: "169.254.0.1{{ bmc_prefix }}"
 bmc_netmask: "{{ bmc_cidr | ipaddr('netmask') }}"

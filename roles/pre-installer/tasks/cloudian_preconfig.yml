@@ -1,0 +1,13 @@
+---
+
+- name: Create PreInstall Directory
+  file:
+    path: "{{ preinstall_directory }}"
+    state: directory
+    owner: root
+    mode: 0755
+
+- name: set Cloudian PreInstall Configuration
+  template:
+    src: preinstall_config.j2
+    dest: "{{ preinstall_directory }}/PreInstallConfig.txt"

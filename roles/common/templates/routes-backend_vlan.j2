@@ -1,2 +1,10 @@
-{{ net_backend_route1 }}" dev bond0.{{ net_backend_vlan }}
-{{ net_backend_route2 }}" dev bond0.{{ net_backend_vlan }}
+# static routes to remote Datacenters' backend networks
+
+{% for dc in groups %}
+{% if dc | regex_search('DC[0-9]+') %}
+{% set dc_host = groups[dc][0] %}
+{% if hostvars[dc_host]['net_gateway'] != hostvars[ansible_hostname]['net_gateway'] %}
+{{ hostvars[dc_host]['net_backend_subnet'] }} via {{ hostvars[ansible_hostname]['net_backend_gateway'] }} dev bond0.{{ hostvars[ansible_hostname]['net_backend_vlan'] }}
+{% endif %}
+{% endif %}
+{% endfor %}

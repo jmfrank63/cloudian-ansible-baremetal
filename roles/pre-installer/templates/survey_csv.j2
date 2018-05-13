@@ -5,5 +5,5 @@
 # used in this file.
 #
 {% for host in groups['cloudian'] %}
-{{ hyperstore_region }},{{ hostvars[host]['ansible_hostname'] }},{{ hostvars[host]['net_frontend_addr'] }},{{ hostvars[host]['hyperstore_dc'] }},{{ hostvars[host]['hyperstore_rack'] }}
+{{ hyperstore_region }},{{ host }},{{ hostvars[host]['net_frontend_addr'] }},{{ hostvars[host]['hyperstore_dc'] }},{{ hostvars[host]['hyperstore_rack'] }}
 {% endfor %}

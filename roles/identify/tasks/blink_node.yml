@@ -1,0 +1,4 @@
+---
+
+- name: "{{ inventory_hostname }} (watch NICs or Chassis LEDs)"
+  shell: "ipmitool chassis identify 10; ethtool --identify {{ identify_interface }} 10 &"
