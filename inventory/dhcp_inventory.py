@@ -11,7 +11,7 @@ parser.set_defaults(count=False)
 args = parser.parse_args()
 
 # Make sure the DHCP lease contains DHCP_HOSTNAME=<string> on the DHCP enabled interface of nodes you want to manage (default is "node" here. Cloudian Appliance default is "cloudian-node")
-bash_out = subprocess.Popen("cat /var/lib/dhcpd/dhcpd.leases | perl -e 'while(<>) {$_ =~ m/lease ([0-9.]+)/; $addr=$1; if($_ =~ m/client-hostname \"node/ && not($1 =~ m/QCT/)) {print \"$addr\n\"}}' | sort -u", shell=True, stdout=subprocess.PIPE).stdout.read()
+bash_out = subprocess.Popen("cat /var/lib/dhcpd/dhcpd.leases | perl -e 'while(<>) {$_ =~ m/lease ([0-9.]+)/; $addr=$1; if($_ =~ m/client-hostname \".*/ && not($1 =~ m/QCT/)) {print \"$addr\n\"}}' | sort -u", shell=True, stdout=subprocess.PIPE).stdout.read()
 
 servers = {
     'cloudian': {

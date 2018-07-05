@@ -1,6 +1,7 @@
 ---
 
 - hosts: cloudian
+  gather_facts: False
   serial: 1
   roles:
     - identify
