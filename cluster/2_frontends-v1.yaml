@@ -1,0 +1,117 @@
+# kate: indent-width 2;
+
+network-topology:
+  network-config:
+    bond1:
+      type: bond
+      bond_type: lacp
+      slaves: [ enp0s3, enp0s8 ]
+      prefix: 24
+      use: frontend1
+      dns_servers: [ 10.20.30.1, 10.20.30.2 ]
+
+    bond2:
+      type: bond
+      bond_type: lacp
+      slaves: [ enp0s9, enp0s10 ]
+
+    bond2.10:
+      type: vlan
+      vlan_tag: 10
+      physdev: bond2
+      prefix: 24
+      use: frontend2
+
+    bond2.20:
+      type: vlan
+      vlan_tag: 20
+      physdev: bond2
+      netmask: 255.255.255.0
+      use: backend
+
+    ipmi:
+      prefix: 24
+      use: management
+
+  data-centers:
+    DC10:
+      network-config:
+        bond1:
+          gateway: 10.10.10.1
+
+        bond2.10:
+          static-routes:
+            10.20.20.0/24: 10.20.10.1
+
+        bond2.20:
+          static-routes:
+            10.30.20.0/24: 10.30.10.1
+
+        ipmi:
+          gateway: 10.40.10.1
+
+      racks:
+        A11:
+          dc10cloudian101:
+            frontend1:  10.10.10.16
+            frontend2:  10.20.10.16
+            backend:    10.30.10.16
+            management: 10.40.10.16
+          dc10cloudian102:
+            frontend1:  10.10.10.17
+            frontend2:  10.20.10.17
+            backend:    10.30.10.17
+            management: 10.40.10.17
+          dc10cloudian103:
+            frontend1:  10.10.10.18
+            frontend2:  10.20.10.18
+            backend:    10.30.10.18
+            management: 10.40.10.18
+          dc10cloudian104:
+            frontend1:  10.10.10.19
+            frontend2:  10.20.10.19
+            backend:    10.30.10.19
+            management: 10.40.10.19
+
+    DC20:
+      network-config:
+        bond1:
+          gateway: 10.10.20.1
+
+        bond2.10:
+          static-routes:
+            10.20.10.0/24: 10.20.20.1
+
+        bond2.20:
+          static-routes:
+            10.30.10.0/24: 10.30.20.1
+
+        ipmi:
+          gateway: 10.40.20.1
+
+      racks:
+        B22:
+          dc20cloudian101:
+            frontend1:  10.10.20.16
+            frontend2:  10.20.20.16
+            backend:    10.30.20.16
+            management: 10.40.20.16
+          dc20cloudian102:
+            frontend1:  10.10.20.17
+            frontend2:  10.20.20.17
+            backend:    10.30.20.17
+            management: 10.40.20.17
+          dc20cloudian103:
+            frontend1:  10.10.20.18
+            frontend2:  10.20.20.18
+            backend:    10.30.20.18
+            management: 10.40.20.18
+          dc20cloudian104:
+            frontend1:  10.10.20.19
+            frontend2:  10.20.20.19
+            backend:    10.30.20.19
+            management: 10.40.20.19
+
+regions:
+  region-1: [ dc10cloudian101, dc10cloudian102, dc10cloudian103, dc10cloudian104,
+              dc20cloudian101, dc20cloudian102, dc20cloudian103, dc20cloudian104 ]
