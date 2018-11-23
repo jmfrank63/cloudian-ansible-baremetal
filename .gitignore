@@ -3,4 +3,8 @@ bin/
 include/
 lib/
 tmp/
-
+TODO.txt
+CloudianHyperStore-*.bin
+cloudian_license.lic
+facts/*
+deployCluster.retry
