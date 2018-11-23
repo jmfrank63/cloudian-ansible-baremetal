@@ -1,0 +1,69 @@
+{#
+PLEASE: this is a shell script, so keep variable definition lines aligned to the left
+it also helps to the readability of the resulting file
+data from ansible comes in the item var, which is a tuple
+the first element is the device name and the second one is the config
+note that in the case of vlans, the device name is derived from the config
+#}
+{% if item[1].mode is equalto "vlan" %}
+DEVICE="{{ item[1].physdev }}.{{ item[1].vlan_tag }}"
+VLAN="yes"
+PHYSDEV="{{ item[1].physdev }}"
+{% else %}
+DEVICE="{{ item[0] }}"
+{% endif %}
+{% if item[1].mode is equalto "disabled" %}
+ONBOOT="no"
+{% else %}
+ONBOOT="yes"
+{% if item[1].mode is equalto "bond_master" %}
+TYPE="Bond"
+BONDING_OPTS="mode={{ item[1].bond_type }} miimon=100"
+BONDING_MASTER="yes"
+{% else %}
+TYPE="Ethernet"
+{% endif %}
+{% if item[1].mode is equalto "bond_slave" %}
+SLAVE="yes"
+MASTER="{{ item[1].master }}"
+{% endif %}
+{% if item[1].ipv4 is equalto "dhcp" %}
+BOOTPROTO="dhcp"
+{% else %}
+BOOTPROTO="none"
+{% endif %}
+{% if item[1].ipv4 is equalto "static" %}
+IPADDR="{{ item[1].ip_address }}"
+{% if item[1].netmask is defined %}
+NETMASK="{{ item[1].netmask }}"
+{% else %}
+PREFIX="{{ item[1].prefix }}"
+{% endif %}
+{% if item[1].gateway is defined %}
+GATEWAY="{{ item[1].gateway }}"
+{% endif %}
+{% endif %}
+{% if item[1].dns_servers is defined %}
+{% for server in item[1].dns_servers %}
+DNS{{ loop.index }}="{{ server }}"
+{% endfor %}
+{% endif %}
+{% endif %}
+{% if item[1].ipv6 is equalto "disabled" %}
+IPV6INIT="no"
+IPV6_AUTOCONF="no"
+DHCPV6C="no"
+{% endif %}
+{% if item[1].ipv6 is equalto "dhcp" %}
+IPV6INIT="yes"
+IPV6_AUTOCONF="no"
+DHCPV6C="yes"
+DHCPV6C_OPTIONS=""
+{% endif %}
+{% if item[1].ipv6 is equalto "slaac" %}
+IPV6INIT="yes"
+IPV6_AUTOCONF="yes"
+DHCPV6C="no"
+{% endif %}
+NM_CONTROLLED="no"
+USERCTL="no"

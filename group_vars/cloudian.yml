@@ -1,15 +1,25 @@
 ---
-
+# these are the credentials to login in the cluster machines
 ansible_user: root
 ansible_ssh_pass: password
+
 tools_directory: "/root/CloudianTools"
 preinstall_directory: "/etc/cloudian"
+
 network_scripts_dir: "/etc/sysconfig/network-scripts"
+# this is the interface that is connected to the switch and the provision machine
 provision_interface: "eno1"
+# this interface will be used to identify the machine by blinking its lights
 identify_interface: "eno2"
+
+# these are automatically calculated from the inital data
 hyperstore_installer_node: "{{ ansible_play_hosts | intersect(groups['installer-node']) | first }}"
 hostname_nonfqdn: "{{ inventory_hostname.split('.')[0] }}"
 net_backend_cidr: "{{ net_backend_addr }}{{ net_backend_prefix }}"
 net_backend_subnet: "{{ net_backend_cidr | ipaddr('subnet') }}"
+
+# modify this one too?
 bmc_cidr: "169.254.0.1{{ bmc_prefix }}"
 bmc_netmask: "{{ bmc_cidr | ipaddr('netmask') }}"
+
+sys_timezone: "Europe/Monaco"

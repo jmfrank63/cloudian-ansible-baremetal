@@ -1,38 +1,12 @@
 ---
 
-- fail: msg="physical interface {{ net_bonding_slave1 }} does not exist"
-  when: net_bonding_slave1 not in ansible_interfaces and net_verify_nic|default(True)
-
-- fail: msg="physical interface {{ net_bonding_slave2 }} does not exist"
-  when: net_bonding_slave2 not in ansible_interfaces and net_verify_nic|default(True)
-
-- name: Configure Bonding
+- name: Configuring Networking
+  # TODO: fail if physical interfaces do not exist
   template:
-    src: ifcfg-bond0.j2
-    dest: "{{ network_scripts_dir }}/ifcfg-bond0"
+    src: ifcfg.j2
+    # as dots have been replaced by _'s, revert that
+    dest: "/etc/sysconfig/network-scripts/ifcfg-{{ item[0] | regex_replace('_', '.') }}"
 
-- name: Setup Bonding slave1
-  template:
-    src: ifcfg-bond0_slave1.j2
-    dest: "{{ network_scripts_dir }}/ifcfg-{{ net_bonding_slave1 }}"
-
-- name: Setup Bonding slave2
-  template:
-    src: ifcfg-bond0_slave2.j2
-    dest: "{{ network_scripts_dir }}/ifcfg-{{ net_bonding_slave2 }}"
-
-- name: Setup VLAN frontend
-  template:
-    src: ifcfg-frontend_vlan.j2
-    dest: "{{ network_scripts_dir }}/ifcfg-bond0.{{ net_frontend_vlan }}"
-
-- name: Setup VLAN backend
-  template:
-    src: ifcfg-backend_vlan.j2
-    dest: "{{ network_scripts_dir }}/ifcfg-bond0.{{ net_backend_vlan }}"
-
-- name: Setup Static Routes
-  template:
-    src: routes-backend_vlan.j2
-    dest: "{{ network_scripts_dir }}/route-bond0.{{ net_backend_vlan }}"
-  when: net_cfg_routes|default(False)
+  loop: "{{ interfaces.items() }}"
+  tags:
+    - networking
