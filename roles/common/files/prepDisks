@@ -13,16 +13,22 @@ which sgdisk >/dev/null || exit 1
 n=1
 tools_directory="/root/CloudianTools"
 function get_datadrives() {
-        ls /sys/block/ | egrep -vw '[md][md]-?[0-9]+' | while read dev; do
+    for dev in $(ls /sys/block/ | egrep -vw 'sr[0-9]|[md][md]-?[0-9]+'); do
         skip=false
         # check if we exist in mdraid
         egrep -q "${dev}[0-9]+" /proc/mdstat 2>/dev/null && skip=true
         # skip LVM PV
         pvdisplay 2>/dev/null | egrep -q "^\s+PV Name\s+\/dev\/${dev}[0-9]+$" && skip=true
         # check if UUID is present in fstab
-        ls /dev/${dev}* | while read ddev; do
-                duuid=$(blkid -o value -s UUID $ddev)
-                egrep -q "$duuid" /etc/fstab && skip=true
+        for ddev in /dev/${dev}*; do
+            duuid=$(blkid -o value -s UUID $ddev)
+            # do not grep for the empty string!
+            if ( [ -n "$duuid" ] && grep -q "$duuid" /etc/fstab ) || \
+               grep -qw "$ddev" /etc/fstab; then
+
+                skip=true
+                break
+            fi
         done
         [[ ${skip} = true ]] || echo $dev
 done
