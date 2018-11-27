@@ -12,13 +12,21 @@ which sgdisk >/dev/null || exit 1
 
 n=1
 tools_directory="/root/CloudianTools"
+
 function get_datadrives() {
     for dev in $(ls /sys/block/ | egrep -vw 'sr[0-9]|[md][md]-?[0-9]+'); do
         skip=false
+
         # check if we exist in mdraid
-        egrep -q "${dev}[0-9]+" /proc/mdstat 2>/dev/null && skip=true
+        if grep -q "${dev}[0-9]+" /proc/mdstat 2>/dev/null; then
+            skip=true
+        fi
+
         # skip LVM PV
-        pvdisplay 2>/dev/null | egrep -q "^\s+PV Name\s+\/dev\/${dev}[0-9]+$" && skip=true
+        if pvdisplay 2>/dev/null | grep -q "^\s+PV Name\s+\/dev\/${dev}[0-9]+$"; then
+            skip=true
+        fi
+
         # check if UUID is present in fstab
         for ddev in /dev/${dev}*; do
             duuid=$(blkid -o value -s UUID $ddev)
@@ -30,8 +38,11 @@ function get_datadrives() {
                 break
             fi
         done
-        [[ ${skip} = true ]] || echo $dev
-done
+
+        if ! [[ ${skip} = true ]]; then
+            echo $dev
+        fi
+    done
 }
 
 # make sure we clean up any left overs
@@ -40,12 +51,16 @@ ls -d /cloudian* 2>/dev/null | while read mp; do
         sleep 0.5
         rmdir $mp
 done
+
 # remove fstab entries
 sed -i -r -e "/^UUID=.+\s+\/cloudian[0-9]+\s+.+$/d" /etc/fstab
 rm ${tools_directory}/fslist.txt 2>/dev/null
+
 # important to run daemon-reload! Otherwise re-creating a filesystem on device
 # will cause systemd to automatically mount it even if fstab has been cleared out
-grep -q 'release 6' /etc/redhat-release || systemctl daemon-reload
+if ! grep -q 'release 6' /etc/redhat-release; then
+    systemctl daemon-reload
+fi
 
 DEVS=($( get_datadrives ))
 _pids=()
