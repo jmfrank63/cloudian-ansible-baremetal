@@ -1,0 +1,9 @@
+{#
+data from ansible comes in the item var, which is a tuple
+the first element is the device name and the second one is the config,
+the first element is the remote network+prefix
+and the second one itself a tuple is the gateway
+#}
+{% for route in item[1]['static-routes'].items() %}
+{{ route[0] }} via {{ route[1] }} dev {{ item[0] }}
+{% endfor %}
