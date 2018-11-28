@@ -15,8 +15,9 @@ sed -i -e 's/VIRTUAL_ENV=".*"/VIRTUAL_ENV="$(pwd)"/' bin/activate
 mkdir -pv tmp mnt
 
 # trim.sh is copied because it's run in the staging dir; it will removed later
-rsync --archive --update --progress --delete \
-    bin lib share group_vars inventory roles deployCluster.yml run.sh trim.sh \
+rsync --archive --update --delete \
+    bin lib share group_vars inventory roles \
+    deployCluster.yml run.sh trim.sh \
     tmp/
 
 # run.sh is not executable here (to avoid mistakes that can destroy your dev machine)
