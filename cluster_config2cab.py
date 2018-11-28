@@ -24,7 +24,8 @@ def convert(input):
     # pprint(input)
 
     for interface, interface_config in input.items():
-        if isinstance(interface_config, str):
+        # skip declarations like installer or frontend
+        if isinstance(interface_config, str) or isinstance(interface_config, bool):
             continue
 
         if interface == 'ipmi':
@@ -146,6 +147,9 @@ def main():
                 # pprint(host_network_config)
 
                 dc['hosts'][host] = convert(host_network_config)
+
+                if host_network_config.get('installer-node', False):
+                    output['installer-node'] = host
 
         output['cloudian']['children'][dc_name] = dc
 

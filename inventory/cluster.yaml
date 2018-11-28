@@ -1,5 +1,3 @@
-installer-node: dc10cloudian101
-
 all:
   vars:
     run_from_iso: true
@@ -443,3 +441,4 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+installer-node: dc10cloudian101

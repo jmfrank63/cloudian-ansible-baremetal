@@ -53,6 +53,7 @@ network-topology:
       racks:
         A11:
           dc10cloudian101:
+            installer-node: yes
             frontend1:  10.10.10.16
             frontend2:  10.20.10.16
             backend:    10.30.10.16
