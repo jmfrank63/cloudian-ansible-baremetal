@@ -3,66 +3,87 @@
 # set -e
 
 if [ "$1" != "--format" ]; then
-        echo "Usage: $0 --format"
-        echo "  Will create a single partition and formats any disk found on the system excluding OS drives (yes, ANY device other than OS!)"
-        exit 2
+    echo "Usage: $0 --format"
+    echo "  Will create a single partition and formats any disk found on the system excluding OS drives (yes, ANY device other than OS!)"
+    exit 2
 fi
 
 which sgdisk >/dev/null || exit 1
 
 n=1
 tools_directory="/root/CloudianTools"
+
 function get_datadrives() {
-        ls /sys/block/ | egrep -vw '[md][md]-?[0-9]+' | while read dev; do
+    for dev in $(ls /sys/block/ | egrep -vw 'sr[0-9]|[md][md]-?[0-9]+'); do
         skip=false
+
         # check if we exist in mdraid
-        egrep -q "${dev}[0-9]+" /proc/mdstat 2>/dev/null && skip=true
+        if grep -q "${dev}[0-9]+" /proc/mdstat 2>/dev/null; then
+            skip=true
+        fi
+
         # skip LVM PV
-        pvdisplay 2>/dev/null | egrep -q "^\s+PV Name\s+\/dev\/${dev}[0-9]+$" && skip=true
+        if pvdisplay 2>/dev/null | grep -q "^\s+PV Name\s+\/dev\/${dev}[0-9]+$"; then
+            skip=true
+        fi
+
         # check if UUID is present in fstab
-        ls /dev/${dev}* | while read ddev; do
-                duuid=$(blkid -o value -s UUID $ddev)
-                egrep -q "$duuid" /etc/fstab && skip=true
+        for ddev in /dev/${dev}*; do
+            duuid=$(blkid -o value -s UUID $ddev)
+            # do not grep for the empty string!
+            if ( [ -n "$duuid" ] && grep -q "$duuid" /etc/fstab ) || \
+               grep -qw "$ddev" /etc/fstab; then
+
+                skip=true
+                break
+            fi
         done
-        [[ ${skip} = true ]] || echo $dev
-done
+
+        if ! [[ ${skip} = true ]]; then
+            echo $dev
+        fi
+    done
 }
 
 # make sure we clean up any left overs
 ls -d /cloudian* 2>/dev/null | while read mp; do
-        umount $mp 2>/dev/null
-        sleep 0.5
-        rmdir $mp
+    umount $mp 2>/dev/null
+    sleep 0.5
+    rmdir $mp
 done
+
 # remove fstab entries
 sed -i -r -e "/^UUID=.+\s+\/cloudian[0-9]+\s+.+$/d" /etc/fstab
 rm ${tools_directory}/fslist.txt 2>/dev/null
+
 # important to run daemon-reload! Otherwise re-creating a filesystem on device
 # will cause systemd to automatically mount it even if fstab has been cleared out
-grep -q 'release 6' /etc/redhat-release || systemctl daemon-reload
+if ! grep -q 'release 6' /etc/redhat-release; then
+    systemctl daemon-reload
+fi
 
 DEVS=($( get_datadrives ))
 _pids=()
 for dev in ${DEVS[@]}; do
-        echo "init device $dev"
-        device="/dev/${dev}"
-        dpart=${device}1
-        # [[ -e ${dpart} ]] && continue
-        sgdisk -Z ${device}
-        sgdisk --new=1:2048 ${device}
-        ( mkfs.ext4 -q -i 8192 -m 0 -E lazy_itable_init=1,discard -O dir_index,extent,flex_bg,large_file,sparse_super,uninit_bg ${dpart} ) &
-        _pids+=(${!})
-        DEVS[${!}]=${dpart}
+    echo "init device $dev"
+    device="/dev/${dev}"
+    dpart=${device}1
+    # [[ -e ${dpart} ]] && continue
+    sgdisk -Z ${device}
+    sgdisk --new=1:2048 ${device}
+    ( mkfs.ext4 -q -i 8192 -m 0 -E lazy_itable_init=1,discard -O dir_index,extent,flex_bg,large_file,sparse_super,uninit_bg ${dpart} ) &
+    _pids+=(${!})
+    DEVS[${!}]=${dpart}
 done
 
 for _pid in ${_pids[@]}; do
-        wait ${_pid}
-        _dpart=${DEVS[$_pid]}
-        mkdir /cloudian${n}
-        UUID=$( blkid -o value -s UUID ${_dpart} )
-        printf 'UUID=%s\t%s\t%s\t%s\t0\t1\n' "${UUID}" "/cloudian${n}" "ext4" "defaults,rw,nosuid,noexec,nodev,noatime,noinit_itable,data=ordered,errors=remount-ro" >> /etc/fstab
-        printf '%s\t%s\n' "${_dpart}" "/cloudian${n}" >> ${tools_directory}/fslist.txt
-        let n++
+    wait ${_pid}
+    _dpart=${DEVS[$_pid]}
+    mkdir /cloudian${n}
+    UUID=$( blkid -o value -s UUID ${_dpart} )
+    printf 'UUID=%s\t%s\t%s\t%s\t0\t1\n' "${UUID}" "/cloudian${n}" "ext4" "defaults,rw,nosuid,noexec,nodev,noatime,noinit_itable,data=ordered,errors=remount-ro" >> /etc/fstab
+    printf '%s\t%s\n' "${_dpart}" "/cloudian${n}" >> ${tools_directory}/fslist.txt
+    let n++
 done
 
 mount -a
