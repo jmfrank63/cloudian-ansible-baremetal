@@ -28,8 +28,20 @@ def convert(input):
         if isinstance(interface_config, str) or isinstance(interface_config, bool):
             continue
 
+        use = interface_config.get('use', None)
+
         if interface == 'ipmi':
-            # TODO
+            # this is handled specially because the interface is declared as ipmi
+            # and IP info comes from the management info and goes to specific variables
+            # use: foo
+            # foo        -> bmc_addr
+            # prefix     -> bmc_prefix
+            # gateway    -> bmc_gateway
+
+            # TODO: check
+            output['bmc_addr']    = input[use]
+            output['bmc_prefix']  = interface_config['prefix']
+            output['bmc_gateway'] = interface_config['gateway']
             continue
 
         # pprint(interface_config)
@@ -67,7 +79,6 @@ def convert(input):
         elif interface_config['type'] == 'normal':
             config = dict(mode='normal')
 
-        use = interface_config.get('use', None)
         if use is not None:
             ip_address = input[use]
 
@@ -119,6 +130,7 @@ def main():
     # pprint(cluster_network_config)
 
     output = dict(cloudian=dict(children={}))
+    output['all'] = { 'vars': {'run_from_iso': True } }
 
     for dc_name, dc_config in datacenters.items():
         dc_network_config = deepcopy(cluster_network_config)
@@ -156,9 +168,10 @@ def main():
                 if host_network_config.get('installer-node', False):
                     output['installer-node'] = host
 
-        output['cloudian']['children'][dc_name] = dc
+                if 'ipmi' in host_network_config:
+                    output['all']['vars']['cfg_ipmi'] = True
 
-        output['all'] = { 'vars': {'run_from_iso': True } }
+        output['cloudian']['children'][dc_name] = dc
 
     open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
 
