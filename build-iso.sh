@@ -40,8 +40,8 @@ done
 
     # generate an ssh key pair
     ssh_key="roles/common/files/cloudian-installation-key"
-    if [ ! -f $ssh_key ]; then
-        ssh-keygen -b 2048 -t rsa -f $ssh_key -q -N ''
+    if [ ! -f "$ssh_key.pub" ]; then
+        ssh-keygen -v -b 2048 -t rsa -f $ssh_key -q -N '' -C 'cloudian_master_key'
         # move the priv key to the pre-installer role
         mv -v $ssh_key roles/pre-installer/files/
     fi
