@@ -6,7 +6,6 @@ cloudian:
     DC10:
       hosts:
         dc10cloudian101:
-          net_frontend_addr: 10.10.10.16
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -60,6 +59,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.16
         dc10cloudian102:
           interfaces:
             bond1:
@@ -114,6 +114,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.17
         dc10cloudian103:
           interfaces:
             bond1:
@@ -168,6 +169,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.18
         dc10cloudian104:
           interfaces:
             bond1:
@@ -222,6 +224,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.19
     DC20:
       hosts:
         dc20cloudian101:
@@ -278,6 +281,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.16
         dc20cloudian102:
           interfaces:
             bond1:
@@ -332,8 +336,8 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.17
         dc20cloudian103:
-          net_frontend_addr: 10.10.20.18
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -387,6 +391,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.18
         dc20cloudian104:
           interfaces:
             bond1:
@@ -441,4 +446,5 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.19
 installer-node: dc10cloudian101

@@ -85,6 +85,11 @@ def convert(input):
             # TODO
             config['ipv6'] = 'disabled'
 
+            if use == 'frontend' or interface_config.get('main_frontend', False):
+                # TODO: check ip_address is defined
+                output['net_frontend_addr'] = ip_address
+                del config['main_frontend']
+
         output['interfaces'][interface] = config
 
     # pprint(output)

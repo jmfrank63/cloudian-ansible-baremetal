@@ -21,6 +21,8 @@ network-topology:
       physdev: bond2
       prefix: 24
       use: frontend2
+      # otherwise it picks up the use: frontend interface
+      main_frontend: yes
 
     bond2.20:
       type: vlan
