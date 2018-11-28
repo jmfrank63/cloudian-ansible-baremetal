@@ -4,4 +4,7 @@ source bin/activate
 
 set -eu
 
-ansible-playbook --connection local --limit $1 --inventory-file inventory/cluster.yaml --verbose deployCluster.yml
+host=$1
+shift
+
+ansible-playbook --connection local --limit $host --inventory-file inventory/cluster.yaml --verbose deployCluster.yml "$@"
