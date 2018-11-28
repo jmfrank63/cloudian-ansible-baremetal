@@ -6,7 +6,12 @@
     src: ifcfg.j2
     # as dots have been replaced by _'s, revert that
     dest: "/etc/sysconfig/network-scripts/ifcfg-{{ item[0] | regex_replace('_', '.') }}"
-
   loop: "{{ interfaces.items() }}"
-  tags:
-    - networking
+
+- name: Configure Static Routes
+  template:
+    src: route.j2
+    # as dots have been replaced by _'s, revert that
+    dest: "/etc/sysconfig/network-scripts/route-{{ item[0] | regex_replace('_', '.') }}"
+  loop: "{{ interfaces.items() }}"
+  when: item[1]['static-routes'] is defined

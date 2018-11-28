@@ -8,7 +8,7 @@
 
 - hosts: installer-node
   vars:
-    hyperstore_version: "7.0.2.1"
+    hyperstore_version: "7.1.1"
     staging_directory: "/root/CloudianPackages/{{ hyperstore_version }}"
   roles:
     - pre-installer

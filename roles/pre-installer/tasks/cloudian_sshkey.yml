@@ -4,11 +4,20 @@
   shell: ssh-keygen -b 2048 -t rsa -f {{ staging_directory }}/cloudian-installation-key -q -N ''
   args:
     creates: "{{ staging_directory }}/cloudian-installation-key"
+  when: not run_from_iso
 
 - name: Slurp cloudian-installation-key
   slurp: src="{{ staging_directory }}/cloudian-installation-key.pub"
   register: cloudian_installation_key
+  when: not run_from_iso
 
 - set_fact:
     cloudian_installation_key: "{{ cloudian_installation_key }}"
     cacheable: true
+  when: not run_from_iso
+
+- name: Copy Cloudian Installer SSH priv key
+  copy:
+    src: "{{ role_path }}/files/cloudian-installation-key"
+    dest: "{{ staging_directory }}/cloudian-installation-key"
+  when: run_from_iso

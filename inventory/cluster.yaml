@@ -1,11 +1,15 @@
-installer-node: dc10cloudian101
-
+all:
+  vars:
+    cfg_ipmi: true
+    run_from_iso: true
 cloudian:
   children:
     DC10:
       hosts:
         dc10cloudian101:
-          net_frontend_addr: 10.10.10.16
+          bmc_addr: 10.40.10.16
+          bmc_gateway: 10.40.10.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -59,7 +63,11 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.16
         dc10cloudian102:
+          bmc_addr: 10.40.10.17
+          bmc_gateway: 10.40.10.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -113,7 +121,11 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.17
         dc10cloudian103:
+          bmc_addr: 10.40.10.18
+          bmc_gateway: 10.40.10.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -167,7 +179,11 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.18
         dc10cloudian104:
+          bmc_addr: 10.40.10.19
+          bmc_gateway: 10.40.10.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -221,9 +237,13 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.10.19
     DC20:
       hosts:
         dc20cloudian101:
+          bmc_addr: 10.40.20.16
+          bmc_gateway: 10.40.20.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -277,7 +297,11 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.16
         dc20cloudian102:
+          bmc_addr: 10.40.20.17
+          bmc_gateway: 10.40.20.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -331,8 +355,11 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.17
         dc20cloudian103:
-          net_frontend_addr: 10.10.20.18
+          bmc_addr: 10.40.20.18
+          bmc_gateway: 10.40.20.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -386,7 +413,11 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.18
         dc20cloudian104:
+          bmc_addr: 10.40.20.19
+          bmc_gateway: 10.40.20.1
+          bmc_prefix: 24
           interfaces:
             bond1:
               bond_type: 802.3ad
@@ -440,3 +471,7 @@ cloudian:
               ipv6: disabled
               master: bond2
               mode: bond_slave
+          net_frontend_addr: 10.20.20.19
+installer-node:
+  hosts:
+    dc10cloudian101: {}

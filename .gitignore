@@ -1,10 +1,10 @@
+abi.iso
+bin/
+include/
+lib/
+tmp/
 TODO.txt
 CloudianHyperStore-*.bin
 cloudian_license.lic
 facts/*
-inventory/ansible-maas.py
-inventory/env.sh
-inventory/foreman_ansible_inventory
-test.yml
-roles/test
 deployCluster.retry

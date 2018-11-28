@@ -4,4 +4,18 @@
   authorized_key:
     user: root
     state: present
-    key: "{{  hostvars[groups['installer-node'][0]]['cloudian_installation_key']['content'] | b64decode }}"
+    key: "{{ hostvars[groups['installer-node'][0]]['cloudian_installation_key']['content'] | b64decode }}"
+  when: not run_from_iso
+
+- name: Read Generated SSH pub key
+  slurp:
+    src: "{{ role_path }}/files/cloudian-installation-key.pub"
+  register: cloudian_installation_pub_key
+  when: run_from_iso
+
+- name: Copy Cloudian Installer SSH pub key
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ cloudian_installation_pub_key['content'] | b64decode }}"
+  when: run_from_iso

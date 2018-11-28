@@ -1,1 +1,17 @@
+# neded for node_discovery.py
 pick==0.6.4
+
+# real dependency
+ansible==2.5.1
+
+# the rest are tansitive
+MarkupSafe==1.0
+asn1crypto==0.24.0
+cryptography==2.1.4
+enum34==1.1.6
+idna==2.6
+ipaddress==1.0.17
+Jinja2==2.10
+paramiko==2.0.0
+pyasn1==0.4.2
+six==1.11.0
