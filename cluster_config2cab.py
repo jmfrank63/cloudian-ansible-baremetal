@@ -149,6 +149,8 @@ def main():
 
         output['cloudian']['children'][dc_name] = dc
 
+        output['all'] = { 'vars': {'run_from_iso': True } }
+
     open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
 
 

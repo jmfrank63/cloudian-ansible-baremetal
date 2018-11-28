@@ -1,5 +1,8 @@
 installer-node: dc10cloudian101
 
+all:
+  vars:
+    run_from_iso: true
 cloudian:
   children:
     DC10:

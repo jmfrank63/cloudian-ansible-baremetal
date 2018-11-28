@@ -6,3 +6,4 @@
     content: "{{ hostvars[groups['installer-node'][0]]['cloudian_system_setup']['content'] | b64decode }}"
     owner: root
     mode: 0750
+  when: not run_from_iso
