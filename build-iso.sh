@@ -41,6 +41,8 @@ done
     ssh_key="roles/common/files/cloudian-installation-key"
     if [ ! -f $ssh_key ]; then
         ssh-keygen -b 2048 -t rsa -f $ssh_key -q -N ''
+        # move the priv key to the pre-installer role
+        mv -v $ssh_key roles/pre-installer/files/
     fi
 
     genisoimage -volid "MagicConfiblugator" \

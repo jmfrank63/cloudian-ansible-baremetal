@@ -18,6 +18,6 @@
 
 - name: Copy Cloudian Installer SSH priv key
   copy:
-    src: cloudian-installation-key
+    src: "{{ role_path }}/files/cloudian-installation-key"
     dest: "{{ staging_directory }}/cloudian-installation-key"
   when: run_from_iso
