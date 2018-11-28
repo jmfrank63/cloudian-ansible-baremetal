@@ -4,3 +4,10 @@
   template:
     src: survey_csv.j2
     dest: "{{ staging_directory }}/survey.csv"
+  when: not run_from_iso
+
+- name: Copy Survey File
+  copy:
+    src:  "{{ role_path }}/files/survey.csv"
+    dest: "{{ staging_directory }}/survey.csv"
+  when: run_from_iso
