@@ -4,6 +4,7 @@ import sys
 # from argparse import ArgParser
 from pprint import pprint
 from copy import deepcopy
+import csv
 
 import yaml
 
@@ -128,9 +129,14 @@ def main():
 
     # print(datacenters)
     # pprint(cluster_network_config)
+    backend_interface = [ k for k, v in cluster_network_config.items()
+                            if v.get('use', '') == 'backend' ][0]
 
     output = dict(cloudian=dict(children={}))
     output['all'] = { 'vars': {'run_from_iso': True } }
+
+    # holds data used to easily create the survey file
+    hosts_info = {}
 
     for dc_name, dc_config in datacenters.items():
         dc_network_config = deepcopy(cluster_network_config)
@@ -149,7 +155,7 @@ def main():
             racks = dc_config
 
         # print(racks)
-        for rack in racks.values():
+        for rack_name,  rack in racks.items():
             if isinstance(rack, dict):
                 hosts = rack.keys()
                 hosts_network_config = rack
@@ -171,9 +177,26 @@ def main():
                 if 'ipmi' in host_network_config:
                     output['all']['vars']['cfg_ipmi'] = True
 
+                hosts_info[host] = ( dc_name, rack_name, dc['hosts'][host]['net_frontend_addr'],
+                                     dc['hosts'][host])
+
         output['cloudian']['children'][dc_name] = dc
 
     open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
+
+    # survey.csv
+    csv_rows = []
+
+    for region, hosts in input['regions'].items():
+        for host in hosts:
+            # {{ hyperstore_region }},{{ host }},{{ hostvars[host]['net_frontend_addr'] }},
+            # {{ hostvars[host]['hyperstore_dc'] }},{{ hostvars[host]['hyperstore_rack'] }},
+            # bond0.{{ hostvars[host]['net_backend_vlan'] }}
+            csv_rows.append([ region, host, hosts_info[host][2],
+                              hosts_info[host][0], hosts_info[host][1],
+                              backend_interface ])
+
+    csv.writer(open('roles/pre-installer/files/survey.csv', 'w+')).writerows(csv_rows)
 
 
 if __name__ == '__main__':
