@@ -166,7 +166,7 @@ def main():
                 dc['hosts'][host] = convert(host_network_config)
 
                 if host_network_config.get('installer-node', False):
-                    output['installer-node'] = host
+                    output['installer-node'] = { 'hosts': { host: {} } }
 
                 if 'ipmi' in host_network_config:
                     output['all']['vars']['cfg_ipmi'] = True

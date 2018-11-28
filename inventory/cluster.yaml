@@ -472,4 +472,6 @@ cloudian:
               master: bond2
               mode: bond_slave
           net_frontend_addr: 10.20.20.19
-installer-node: dc10cloudian101
+installer-node:
+  hosts:
+    dc10cloudian101: {}
