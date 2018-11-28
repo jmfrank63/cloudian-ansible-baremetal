@@ -7,3 +7,11 @@
     owner: root
     mode: 0750
   when: not run_from_iso
+
+- name: Copy system_setup.sh
+  copy:
+    src: "{{ role_path }}/files/system_setup.sh"
+    dest: "{{ tools_directory }}/system_setup.sh"
+    owner: root
+    mode: 0750
+  when: run_from_iso
