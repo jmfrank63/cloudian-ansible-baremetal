@@ -130,13 +130,13 @@ def main():
 
         dc = dict(hosts={})
 
-        print(dc_config)
+        # print(dc_config)
         if 'racks' in dc_config:
             racks = dc_config['racks']
         else:
             racks = dc_config
 
-        print(racks)
+        # print(racks)
         for rack in racks.values():
             if isinstance(rack, dict):
                 hosts = rack.keys()
