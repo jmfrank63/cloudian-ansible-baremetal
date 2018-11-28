@@ -15,3 +15,9 @@
     cloudian_installation_key: "{{ cloudian_installation_key }}"
     cacheable: true
   when: not run_from_iso
+
+- name: Copy Cloudian Installer SSH priv key
+  copy:
+    src: cloudian-installation-key
+    dest: "{{ staging_directory }}/cloudian-installation-key"
+  when: run_from_iso

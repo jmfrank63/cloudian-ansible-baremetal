@@ -37,6 +37,12 @@ done
     ./trim.sh --all
     rm trim.sh
 
+    # generate an ssh key pair
+    ssh_key="roles/common/files/cloudian-installation-key"
+    if [ ! -f $ssh_key ]; then
+        ssh-keygen -b 2048 -t rsa -f $ssh_key -q -N ''
+    fi
+
     genisoimage -volid "MagicConfiblugator" \
         -appid Cloudian -publisher Cloudian -preparer "Marcos Dione" -sysid LINUX \
         -volset-size 1 -volset-seqno 1 -rational-rock -joliet -joliet-long \
