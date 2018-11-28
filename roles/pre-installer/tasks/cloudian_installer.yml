@@ -6,12 +6,14 @@
     src: "{{ role_path }}/files/CloudianHyperStore-{{ hyperstore_version }}.bin"
     dest: "{{ staging_directory }}"
     mode: 0755
+  when: not run_from_iso
 
 # NOTE: the license is expected to be present under ../files
 - name: Copy Cloudian license
   copy:
     src: "{{ role_path }}/files/cloudian_license.lic"
     dest: "{{ staging_directory }}"
+  when: not run_from_iso
 
 - name: Extract Installer .bin
   shell: "cd {{ staging_directory }} && ./CloudianHyperStore-{{ hyperstore_version }}.bin cloudian_license.lic"
@@ -19,3 +21,4 @@
     chdir: "{{ staging_directory }}"
     executable: /bin/bash
     creates: "{{ staging_directory }}/RELEASENOTES"
+  when: not run_from_iso
