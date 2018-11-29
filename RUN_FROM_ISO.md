@@ -5,6 +5,11 @@ nodes is to generate an ISO-9960 image with Ansible, these playbooks and a few
 more things, mount it through the virtual device support of the IPMI/BMC system,
 and run locally.
 
+## Requirements
+
+* `genisoimage`
+* `python-virtualenv`
+
 ## Executive summary (a.k.a. TL:DR)
 
 * Clone this repo.
