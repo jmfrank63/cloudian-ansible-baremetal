@@ -9,6 +9,8 @@ and run locally.
 
 * Clone this repo.
 * Run `./build-ven.sh` to crate a Python virtaulenv with all the dependencies.
+* `source bin/activate`
+
 * Edit `inventory/cluster.yaml` to suit your needs.
 * Edit `roles/pre-install/files/survey.csv` according to the previous file.
 * Run `./build-iso.sh`
