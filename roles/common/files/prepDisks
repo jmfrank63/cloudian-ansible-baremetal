@@ -14,7 +14,7 @@ n=1
 tools_directory="/root/CloudianTools"
 
 function get_datadrives() {
-    for dev in $(ls /sys/block/ | egrep -vw 'sr[0-9]|[md][md]-?[0-9]+'); do
+    for dev in $(ls /sys/block/ | egrep -vw 'loop[0-9]|sr[0-9]|[md][md]-?[0-9]+'); do
         skip=false
 
         # check if we exist in mdraid
