@@ -93,6 +93,8 @@ def convert(input):
                     config['prefix'] = interface_config['prefix']
                 if 'netmask' in interface_config:
                     config['netmask'] = interface_config['netmask']
+                if 'gateway' in interface_config:
+                    config['gateway'] = interface_config['gateway']
 
             # TODO
             config['ipv6'] = 'disabled'

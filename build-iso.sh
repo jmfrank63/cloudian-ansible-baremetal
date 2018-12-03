@@ -43,7 +43,8 @@ done
     if [ ! -f "$ssh_key.pub" ]; then
         ssh-keygen -v -b 2048 -t rsa -f $ssh_key -q -N '' -C 'cloudian_master_key'
         # move the priv key to the pre-installer role
-        mv -v $ssh_key roles/pre-installer/files/
+        mv -v $ssh_key     roles/pre-installer/files/
+        cp -v $ssh_key.pub roles/pre-installer/files/
     fi
 
     genisoimage -volid "MagicConfiblugator" \
