@@ -9,8 +9,11 @@ and run locally.
 
 * `genisoimage`
 * `python-virtualenv`
+* `rsync`
 
 ## Executive summary (a.k.a. TL:DR)
+
+Please build this in a system similar as the target one, f.i., CentOS7.
 
 * Clone this repo.
 * Run `./build-ven.sh` to crate a Python virtaulenv with all the dependencies.
@@ -19,6 +22,7 @@ and run locally.
 * Edit `inventory/cluster.yaml` to suit your needs.
 * Edit `roles/pre-install/files/survey.csv` according to the previous file.
 * Run `./build-iso.sh`
+
 * Mount `abi.iso` on each node through the Virtual Device support of your node's
   IPMI/BMC implementation.
 * Using the remote console, run:
