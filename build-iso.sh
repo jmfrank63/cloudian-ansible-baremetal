@@ -17,11 +17,11 @@ mkdir -pv tmp mnt
 # trim.sh is copied because it's run in the staging dir; it will removed later
 rsync --archive --update --delete \
     bin lib share group_vars inventory roles \
-    deployCluster.yml run.sh trim.sh \
+    deployCluster.yml run-from-iso.sh trim.sh \
     tmp/
 
 # run.sh is not executable here (to avoid mistakes that can destroy your dev machine)
-chmod 755 tmp/run.sh
+chmod 755 tmp/run-from-iso.sh
 
 # fix symlinks for CentOS
 for dir in encodings lib-dynload; do
