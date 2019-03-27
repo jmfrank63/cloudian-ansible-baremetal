@@ -1,23 +1,32 @@
 # Run from ISO
 
-An alternative to accessing the DC and physically connecting to the bak of the
+An alternative to accessing the DC and physically connecting to the back of the
 nodes is to generate an ISO-9960 image with Ansible, these playbooks and a few
 more things, mount it through the virtual device support of the IPMI/BMC system,
 and run locally.
 
+## Requirements
+
+* `genisoimage`
+* `python-virtualenv`
+
 ## Executive summary (a.k.a. TL:DR)
 
 * Clone this repo.
-* Run `./build-ven.sh` to crate a Python virtaulenv with all the dependencies.
+* Run `./build-venv.sh` to crate a Python virtaulenv with all the dependencies.
+* `source bin/activate`
+
 * Edit `inventory/cluster.yaml` to suit your needs.
-* Edit `roles/pre-install/files/survey.csv` according to the previous file.
+* Edit `roles/pre-install/files/survey.csv` according to the previous file. (TODO: this file should be generated)
 * Run `./build-iso.sh`
+  * This creates a file called `abi.iso`
+
 * Mount `abi.iso` on each node through the Virtual Device support of your node's
   IPMI/BMC implementation.
 * Using the remote console, run:
   * `mount /dev/sr0 /mnt`
-  * `cd /tmn`
-  * `./run.sh <node_hostname>`
+  * `cd /mnt`
+  * `./run-from-iso.sh <node_hostname>`
 
 ## Network architecture support
 
@@ -77,7 +86,7 @@ up to the DC or cluster declarations, but I decided to have them on each node to
 make it easier to review each node's config.
 
 Also, because this is run on each node individually, we can't rely on Ansible to
-generate the `survey.csv` file on the fly, so we need to write it beorehand.
+generate the `survey.csv` file on the fly, so we need to write it beforehand.
 Consequently, both files have duplicate data, and that's exactly what we want to
 avoid.
 
