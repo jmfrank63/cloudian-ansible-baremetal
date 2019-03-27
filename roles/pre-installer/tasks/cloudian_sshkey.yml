@@ -20,4 +20,14 @@
   copy:
     src: "{{ role_path }}/files/cloudian-installation-key"
     dest: "{{ staging_directory }}/cloudian-installation-key"
+<<<<<<< HEAD
   when: run_from_iso|bool
+=======
+  when: run_from_iso
+
+- name: Copy Cloudian Installer SSH pub key
+  copy:
+    src: "{{ role_path }}/files/cloudian-installation-key.pub"
+    dest: "{{ staging_directory }}/cloudian-installation-key.pub"
+  when: run_from_iso
+>>>>>>> origin/dev

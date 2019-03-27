@@ -9,8 +9,11 @@ and run locally.
 
 * `genisoimage`
 * `python-virtualenv`
+* `rsync`
 
 ## Executive summary (a.k.a. TL:DR)
+
+Please build this in a system similar as the target one, f.i., CentOS7.
 
 * Clone this repo.
 * Run `./build-venv.sh` to crate a Python virtaulenv with all the dependencies.

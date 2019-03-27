@@ -93,14 +93,18 @@ def convert(input):
                     config['prefix'] = interface_config['prefix']
                 if 'netmask' in interface_config:
                     config['netmask'] = interface_config['netmask']
+                if 'gateway' in interface_config:
+                    config['gateway'] = interface_config['gateway']
 
             # TODO
             config['ipv6'] = 'disabled'
 
-            if use == 'frontend' or interface_config.get('main_frontend', False):
+            if use in ('frontend', 'single') or interface_config.get('main_frontend', False):
                 # TODO: check ip_address is defined
                 output['net_frontend_addr'] = ip_address
-                del config['main_frontend']
+
+                if 'main_frontend' in interface_config:
+                    del config['main_frontend']
 
         output['interfaces'][interface] = config
 
@@ -129,8 +133,9 @@ def main():
 
     # print(datacenters)
     # pprint(cluster_network_config)
+
     backend_interface = [ k for k, v in cluster_network_config.items()
-                            if v.get('use', '') == 'backend' ][0]
+                            if v.get('use', '') in ('backend', 'single') ][0]
 
     output = dict(cloudian=dict(children={}))
     output['all'] = { 'vars': {'run_from_iso': True } }
