@@ -102,6 +102,8 @@ def convert(input):
             if use in ('frontend', 'single') or interface_config.get('main_frontend', False):
                 # TODO: check ip_address is defined
                 output['net_frontend_addr'] = ip_address
+                # this is helpful for ansible to find the hsts if DNS is not setup
+                output['ansible_host'] = ip_address
 
                 if 'main_frontend' in interface_config:
                     del config['main_frontend']
