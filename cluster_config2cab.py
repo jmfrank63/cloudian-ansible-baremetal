@@ -19,30 +19,51 @@ def recursive_update(dst, src):
         return src
 
 
-def convert(input):
+def update(data, new_data):
+    # we take each node's name in new_data, find it in data, and update that dictionary
+    for node in new_data:
+        # pprint(node)
+        name = node['name']
+        try:
+            obj = [ obj for obj in data if obj['name'] == name ][0]
+        except IndexError:
+            data.append(node)
+        else:
+            obj.update(node)
+
+
+def convert(input, node):  # (List[Dict], Dict)
     output = dict(interfaces={})
 
     # pprint(input)
 
-    for interface, interface_config in input.items():
-        # skip declarations like installer or frontend
+    for interface_config in input:  # Dict
+        name = interface_config['name']  # str
+
+        # TODO: fix this, becasue the types all changed now
+        # skip declarations like installer or name
         if isinstance(interface_config, str) or isinstance(interface_config, bool):
             continue
 
-        use = interface_config.get('use', None)
+        use = interface_config.get('use', None)  # str
 
-        if interface == 'ipmi':
-            # this is handled specially because the interface is declared as ipmi
-            # and IP info comes from the management info and goes to specific variables
-            # use: foo
-            # foo        -> bmc_addr
-            # prefix     -> bmc_prefix
-            # gateway    -> bmc_gateway
+        # pprint(interface_config)
+        # print(name)
 
-            # TODO: check
-            output['bmc_addr']    = input[use]
-            output['bmc_prefix']  = interface_config['prefix']
-            output['bmc_gateway'] = interface_config['gateway']
+        if name == 'ipmi':
+            # allow non declaration for virtual clusters
+            if 'management' in node:
+                # this is handled specially because the interface is declared as ipmi
+                # and IP info comes from the management info and goes to specific variables
+                # use: foo
+                # foo        -> bmc_addr
+                # prefix     -> bmc_prefix
+                # gateway    -> bmc_gateway
+
+                output['bmc_addr']    = node[use]
+                output['bmc_prefix']  = interface_config['prefix']
+                output['bmc_gateway'] = interface_config['gateway']
+
             continue
 
         # pprint(interface_config)
@@ -64,7 +85,7 @@ def convert(input):
             for slave in interface_config['slaves']:
                 output['interfaces'][slave] = dict(
                     mode='bond_slave',
-                    master=interface,
+                    master=name,
                     ipv4='disabled',
                     ipv6='disabled',
                 )
@@ -77,11 +98,11 @@ def convert(input):
             del config['type']
             config['mode'] = 'vlan'
 
-        elif interface_config['type'] == 'normal':
+        elif interface_config['type'] in ('normal', 'eth'):
             config = dict(mode='normal')
 
         if use is not None:
-            ip_address = input[use]
+            ip_address = node[use]
 
             if ip_address == 'dhcp':
                 config['ipv4'] = 'dhcp'
@@ -107,11 +128,19 @@ def convert(input):
 
                 if 'main_frontend' in interface_config:
                     del config['main_frontend']
+            elif use == 'backend':
+                output['backend_iface'] = name
 
-        output['interfaces'][interface] = config
+        output['interfaces'][name] = config
 
     # pprint(output)
     return output
+
+
+def find_by_attr(key, value, list):
+    ''' Find an element in list whose key key has value value.'''
+
+    return [ item for item in list if item[key] == value ]
 
 
 def main():
@@ -121,89 +150,71 @@ def main():
     # all the vars
 
     # now, how to do the inheritance?
-    # we have 3 different dicts:
-    # cluster leel
+    # we have 4 different dicts:
+    # cluster level
+    # region level
     # dc level
-    # hosts level
+    # node level
 
-    if 'data-centers' in input['network-topology']:
-        datacenters = input['network-topology']['data-centers']
-        cluster_network_config = input['network-topology'].get('network-config', {})
-    else:
-        datacenters = input['network-topology']
-        cluster_network_config = input.get('network-config', {})
-
-    # print(datacenters)
+    cluster_network_config = input['cluster'].get('network-config', [])
     # pprint(cluster_network_config)
-
-    backend_interface = [ k for k, v in cluster_network_config.items()
-                            if v.get('use', '') in ('backend', 'single') ][0]
+    # print
 
     output = dict(cloudian=dict(children={}))
-    output['all'] = { 'vars': {'run_from_iso': True } }
-
-    # holds data used to easily create the survey file
-    hosts_info = {}
-
-    for dc_name, dc_config in datacenters.items():
-        dc_network_config = deepcopy(cluster_network_config)
-        # this is not recursive
-        # dc_network_config.update(dc_config.get('network-config', {}))
-        recursive_update(dc_network_config, dc_config.get('network-config', {}))
-        # pprint(dc_network_config)
-        # print()
-
-        dc = dict(hosts={})
-
-        # print(dc_config)
-        if 'racks' in dc_config:
-            racks = dc_config['racks']
-        else:
-            racks = dc_config
-
-        # print(racks)
-        for rack_name,  rack in racks.items():
-            if isinstance(rack, dict):
-                hosts = rack.keys()
-                hosts_network_config = rack
-            else:
-                hosts = rack
-                hosts_network_config = input['hosts']
-
-            for host in hosts:
-                host_network_config = deepcopy(dc_network_config)
-                recursive_update(host_network_config, hosts_network_config[host])
-
-                # pprint(host_network_config)
-
-                dc['hosts'][host] = convert(host_network_config)
-
-                if host_network_config.get('installer-node', False):
-                    output['installer-node'] = { 'hosts': { host: {} } }
-
-                if 'ipmi' in host_network_config:
-                    output['all']['vars']['cfg_ipmi'] = True
-
-                hosts_info[host] = ( dc_name, rack_name, dc['hosts'][host]['net_frontend_addr'],
-                                     dc['hosts'][host])
-
-        output['cloudian']['children'][dc_name] = dc
-
-    open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
 
     # survey.csv
     csv_rows = []
 
-    for region, hosts in input['regions'].items():
-        for host in hosts:
-            # {{ hyperstore_region }},{{ host }},{{ hostvars[host]['net_frontend_addr'] }},
-            # {{ hostvars[host]['hyperstore_dc'] }},{{ hostvars[host]['hyperstore_rack'] }},
-            # bond0.{{ hostvars[host]['net_backend_vlan'] }}
-            csv_rows.append([ region, host, hosts_info[host][2],
-                              hosts_info[host][0], hosts_info[host][1],
-                              backend_interface ])
+    for region in input['cluster']['regions']:
+        region_network_config = deepcopy(cluster_network_config)
+        # pprint(region_network_config)
+        # print
 
+        for dc_config in region['data-centers']:
+            dc_name = dc_config['name']
+
+            dc_network_config = deepcopy(region_network_config)
+            recursive_update(dc_network_config, dc_config.get('network-config', []))
+            # pprint(dc_network_config)
+            # print
+
+            # Ansible expects nodes declared as 'hosts'
+            dc = dict(hosts={})
+
+            for node in dc_config['nodes']:
+                node_network_config = deepcopy(dc_network_config)
+                # pprint(node_network_config)
+                # print
+
+                # pprint(node)
+                # print
+
+                # update(node_network_config, node)
+                # pprint(node_network_config)
+                # print
+                # TODO:
+                # node_network_config['ansible_node'] =
+
+                # pprint(node_network_config)
+
+                node_info = convert(node_network_config, node)
+                # pprint(node_info)
+                dc['hosts'][node['name']] = node_info
+
+                if node.get('installer-node', False):
+                    output['installer-node'] = { 'hosts': { node['name']: {} } }
+
+                if 'ipmi' in node_network_config:
+                    output['all']['vars']['cfg_ipmi'] = True
+
+                csv_rows.append([ region['name'], node['name'], node_info['net_frontend_addr'], dc_name, dc_name,
+                                  node_info['backend_iface'] ])
+
+        output['cloudian']['children'][dc_name] = dc
+
+    open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
     csv.writer(open('roles/pre-installer/files/survey.csv', 'w+')).writerows(csv_rows)
+
 
 
 if __name__ == '__main__':
