@@ -1,0 +1,116 @@
+# kate: indent-width 2;
+
+# https://s3.cloudianhyperstore.com/downloads/HyperStore/7/7.1/CloudianHyperStore-7.1-CentOS-7.5-x86_64-Install.iso
+# https://s3.cloudianhyperstore.com/downloads/HyperStore/7/7.1.1/CloudianHyperStore-7.1.1.bin
+
+# BUG BUG BUG initially allow many different ways to specify the same thing,
+# but at some point we will need to keep a small sub set that makes sense
+
+cluster:
+  name: demo3
+  domain: demo3.cloudian.eu
+  admin-endpoint: admin.demo3.cloudian.eu
+  cmc-endpoint: cmc.demo3.cloudian.eu
+  use-hsh: false
+  root-password: x
+  cmc-password: x
+  ssh-authorized-keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDa0qBwFcY84k7dTkd4fX1De2QYGtY6aK6OCsEYH/gPSvHb59JvCsS7BnhrkSa7JK0vdv2h1/xbs1JajsMcNjdHrNwHlA+XPK9dPf4Op1HqTfAQzJxo+w1o1Ff5kXbRtyKb6ZWc3r2HjndIvIxN5t2NgGZ20oZji4CiB0MHEH2AjgUie1D25NQAg7QUF/D2en5PbAyovbA7q3VW6IFMQhAfhBtYcQO8xxdymrMCB+y3mZFsMs2BjpDtbFLiSAjwcy9mx5KIyDqA+k8qlV1ayuDX6WFQoxCGQ2S62+Du5TTE4TOP9kmoyM160IyboN/7lRb2oMeaho06tFGFtkqSSruX mdione@nimbus
+
+  # TODO: allow g Gb GB GiB
+
+  #########################
+  disk-config:
+  - name: ssd1
+    type: raw
+    size: 256  # in GiB
+
+  - name: ssd2
+    # ditto: true   :-P
+    type: raw
+    size: 256  # in GiB
+
+  - name: root
+    type: raid1  # mirror
+    block-devs: [ ssd1, ssd2 ]
+    # TODO: maybe size here could imply the slaves' sizes
+    fs: ext4
+    mount-point: /
+
+  - name: data
+    type: raw
+    fs: ext4
+    count: 4
+    size: 4096
+    mount-point: /cloudian  # %03d -> /cloudian001
+
+  #########################
+  network-config:
+  # we used to allow implicit definition of physical interfaces in the bonds, but we need the type
+  - name:    eth0
+    type:    eth
+    switch:  br20
+    prefix:  24
+    use:     frontend
+
+  - name:   eth1
+    type:   eth
+    switch: br10
+    prefix: 24
+    use:    backend
+
+  - name:   ipmi
+    type:   ipmi  # TODO: for the moment this is ignored
+    switch: br20
+    prefix: 24
+    use:    management  # TODO: this could be implied from name
+
+  #########################
+  # this defines the parameters for the node's resources, other types of infra elements have their own
+  # TODO: move to ams.yaml?
+  container-config:  # this is currently processed by terraform, but I'll try to keep it as generic as possible
+    cpus: 4
+    memory: 8  # in GiB
+
+    # nics should be extracted from network-config
+    # in this case, the devices to list are bond0's and bond1's slaves
+    # but we still need to specify stuff
+    # so it could be specified here or in network-config
+    # in fact, network-config is better because it can be DC specific
+
+
+  #########################
+  regions:
+  - name: region1
+    default: true
+    # we do a per-region NTP because we want to prioritize syncing time across the entire region
+    # instead of each data-center.
+    ntpservers:
+    - 0.centos.pool.ntp.org
+    - 1.centos.pool.ntp.org
+    - 2.centos.pool.ntp.org
+    - 3.centos.pool.ntp.org
+    s3endpoints:
+    - s3-region1.demo3.cloudian.eu
+    websiteendpoint: s3-website-region1.demo3.cloudian.eu
+
+    #######################
+    data-centers:
+    - name: DC10
+      container-config:
+        host: demo-hv1
+
+      #####################
+      nodes:
+      - name: demo3-node1
+        installer-node: true
+        frontend:   10.254.254.231
+        backend:    10.230.230.1
+
+      - name: demo3-node2
+        frontend:   10.254.254.232
+        backend:    10.230.230.2
+
+      - name: demo3-node3
+        frontend:   10.254.254.233
+        backend:    10.230.230.3

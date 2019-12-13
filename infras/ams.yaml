@@ -1,0 +1,29 @@
+# kate: indent-width 2;
+
+backend: terraform-lxd
+
+providers:
+- name: demo-hv1
+  scheme: https
+  address: 10.0.20.11
+  password: Aix4quohquoo
+
+- name: demo-hv2
+  scheme: https
+  address: 10.0.20.12
+  password: Aix4quohquoo
+
+
+disk-pools:
+- name: local
+  driver: dir
+  source: /var/lib/snapd/hostfs/mnt/kvm/lxd/storage-pools/local
+
+
+infra:
+  switches:
+  - name: br10
+    use: [ backend ]
+
+  - name: br20
+    use: [ frontend, frontend0, frontend1, management ]
