@@ -3,6 +3,7 @@
 - name: Write out System_Setup
   copy:
     dest: "{{ tools_directory }}/system_setup.sh"
+    # see roles/pre-installer/tasks/distr_systemsetup.yml
     content: "{{ hostvars[groups['installer-node'][0]]['cloudian_system_setup']['content'] | b64decode }}"
     owner: root
     mode: 0750

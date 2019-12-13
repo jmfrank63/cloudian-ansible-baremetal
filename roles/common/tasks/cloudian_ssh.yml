@@ -7,6 +7,7 @@
     key: "{{ hostvars[groups['installer-node'][0]]['cloudian_installation_key']['content'] | b64decode }}"
   when: not run_from_iso|bool
 
+# we read it so we can make sure the contents is present instead of blindly overwriting the file
 - name: Read Generated SSH pub key
   slurp:
     src: "{{ role_path }}/files/cloudian-installation-key.pub"

@@ -1,11 +1,15 @@
 ---
 
+# this reads the system_setup.sh file from the installer node
 - name: Slurp System_Setup
   slurp: src="{{ staging_directory }}/system_setup.sh"
   register: system_setup
   when: not run_from_iso|bool
 
-- set_fact:
+# and register it as a fact, because registered variables are only valid on the
+# host for the rest of the current playbook run
+- name: Write System_Setup
+  set_fact:
     cloudian_system_setup: "{{ system_setup }}"
     cacheable: true
   when: not run_from_iso|bool

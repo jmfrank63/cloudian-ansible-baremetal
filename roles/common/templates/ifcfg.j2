@@ -4,6 +4,11 @@ it also helps to the readability of the resulting file
 data from ansible comes in the item var, which is a tuple
 the first element is the device name and the second one is the config
 note that in the case of vlans, the device name is derived from the config
+
+see
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s1-networkscripts-interfaces
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s2-networkscripts-interfaces-chan
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/sec-Specific_Kernel_Module_Capabilities#sec-Using_Channel_Bonding
 #}
 {% if item[1].mode is equalto "vlan" %}
 DEVICE="{{ item[1].physdev }}.{{ item[1].vlan_tag }}"

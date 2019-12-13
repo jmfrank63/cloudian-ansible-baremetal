@@ -6,16 +6,22 @@
     creates: "{{ staging_directory }}/cloudian-installation-key"
   when: not run_from_iso|bool
 
+# reads the new pub key from the installer node into a variable...
 - name: Slurp cloudian-installation-key
   slurp: src="{{ staging_directory }}/cloudian-installation-key.pub"
   register: cloudian_installation_key
   when: not run_from_iso|bool
 
-- set_fact:
+# .. and set it as fact because registered variables are only valid on the host
+# for the rest of the current playbook run
+- name: Set pub key as fact
+  set_fact:
     cloudian_installation_key: "{{ cloudian_installation_key }}"
     cacheable: true
   when: not run_from_iso|bool
 
+# the ISO carries a pre generated key because every ansible run is independent
+# (it occurs locally on each node)
 - name: Copy Cloudian Installer SSH priv key
   copy:
     src: "{{ role_path }}/files/cloudian-installation-key"
