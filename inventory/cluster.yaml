@@ -1,477 +1,100 @@
 all:
   vars:
-    cfg_ipmi: true
-    run_from_iso: true
+    run_from_iso: false
 cloudian:
   children:
     DC10:
       hosts:
-        dc10cloudian101:
-          bmc_addr: 10.40.10.16
-          bmc_gateway: 10.40.10.1
-          bmc_prefix: 24
+        demo3-node1:
+          ansible_host: 10.254.254.114
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.10.16
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.114
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.10.16
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.20.0/24: 10.20.10.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.10.16
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.20.0/24: 10.30.10.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.10.16
-        dc10cloudian102:
-          bmc_addr: 10.40.10.17
-          bmc_gateway: 10.40.10.1
-          bmc_prefix: 24
+          net_frontend_addr: 10.254.254.114
+        demo3-node2:
+          ansible_host: 10.254.254.115
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.10.17
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.115
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.10.17
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.20.0/24: 10.20.10.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.10.17
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.20.0/24: 10.30.10.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.10.17
-        dc10cloudian103:
-          bmc_addr: 10.40.10.18
-          bmc_gateway: 10.40.10.1
-          bmc_prefix: 24
+          net_frontend_addr: 10.254.254.115
+        demo3-node3:
+          ansible_host: 10.254.254.116
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.10.18
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.116
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.10.18
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.20.0/24: 10.20.10.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.10.18
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.20.0/24: 10.30.10.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.10.18
-        dc10cloudian104:
-          bmc_addr: 10.40.10.19
-          bmc_gateway: 10.40.10.1
-          bmc_prefix: 24
+          net_frontend_addr: 10.254.254.116
+        demo3-node4:
+          ansible_host: 10.254.254.117
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.10.19
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.117
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.10.19
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.20.0/24: 10.20.10.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.10.19
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.20.0/24: 10.30.10.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.10.19
+          net_frontend_addr: 10.254.254.117
     DC20:
       hosts:
-        dc20cloudian101:
-          bmc_addr: 10.40.20.16
-          bmc_gateway: 10.40.20.1
-          bmc_prefix: 24
+        demo3-node5:
+          ansible_host: 10.254.254.129
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.20.16
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.129
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.20.16
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.10.0/24: 10.20.20.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.20.16
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.10.0/24: 10.30.20.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.20.16
-        dc20cloudian102:
-          bmc_addr: 10.40.20.17
-          bmc_gateway: 10.40.20.1
-          bmc_prefix: 24
+          net_frontend_addr: 10.254.254.129
+        demo3-node6:
+          ansible_host: 10.254.254.130
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.20.17
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.130
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.20.17
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.10.0/24: 10.20.20.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.20.17
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.10.0/24: 10.30.20.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.20.17
-        dc20cloudian103:
-          bmc_addr: 10.40.20.18
-          bmc_gateway: 10.40.20.1
-          bmc_prefix: 24
+          net_frontend_addr: 10.254.254.130
+        demo3-node7:
+          ansible_host: 10.254.254.131
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.20.18
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.131
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.20.18
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.10.0/24: 10.20.20.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.20.18
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.10.0/24: 10.30.20.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.20.18
-        dc20cloudian104:
-          bmc_addr: 10.40.20.19
-          bmc_gateway: 10.40.20.1
-          bmc_prefix: 24
+          net_frontend_addr: 10.254.254.131
+        demo3-node8:
+          ansible_host: 10.254.254.132
           interfaces:
-            bond1:
-              bond_type: 802.3ad
-              ip_address: 10.10.20.19
+            eth0:
+              gateway: 10.254.254.1
+              ip_address: 10.254.254.132
               ipv4: static
               ipv6: disabled
-              mode: bond_master
+              mode: normal
               prefix: 24
-            bond2:
-              bond_type: 802.3ad
-              ipv4: disabled
-              ipv6: disabled
-              mode: bond_master
-            bond2.10:
-              ip_address: 10.20.20.19
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              physdev: bond2
-              prefix: 24
-              static-routes:
-                10.20.10.0/24: 10.20.20.1
-              vlan_tag: 10
-            bond2.20:
-              ip_address: 10.30.20.19
-              ipv4: static
-              ipv6: disabled
-              mode: vlan
-              netmask: 255.255.255.0
-              physdev: bond2
-              static-routes:
-                10.30.10.0/24: 10.30.20.1
-              vlan_tag: 20
-            enp0s10:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-            enp0s3:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s8:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond1
-              mode: bond_slave
-            enp0s9:
-              ipv4: disabled
-              ipv6: disabled
-              master: bond2
-              mode: bond_slave
-          net_frontend_addr: 10.20.20.19
+          net_frontend_addr: 10.254.254.132
 installer-node:
   hosts:
-    dc10cloudian101: {}
+    demo3-node1: {}
