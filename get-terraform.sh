@@ -2,6 +2,13 @@
 
 set -eu
 
+if [ "${1:-}" == '--restart' ];  then
+    rm -f terraform_0.11.15-oci_linux_amd64.zip
+    rm -f terraform-provider-lxd_v1.2.0_linux_amd64.zip
+    rm -f versions.tf
+    rm -rf .terraform
+fi
+
 # wget https://releases.hashicorp.com/terraform/0.12.2/terraform_0.12.2_linux_amd64.zip
 # unzip terraform_0.12.2_linux_amd64.zip
 wget https://releases.hashicorp.com/terraform/0.11.15-oci/terraform_0.11.15-oci_linux_amd64.zip
