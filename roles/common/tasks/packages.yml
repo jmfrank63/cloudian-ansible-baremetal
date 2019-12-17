@@ -13,3 +13,16 @@
   yum:
     name: /tmp/gdisk-0.8.6-5.el7.x86_64.rpm
     state: present
+
+- name: Install Packages
+  yum:
+    name:
+      - which
+      - bridge-utils
+      - gdisk
+      - vim-minimal
+      - nmap-ncat
+      - sudo
+      - libsysfs
+      - openssl
+      - selinux-policy  # I hac issues with lxc containers
