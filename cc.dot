@@ -7,9 +7,9 @@ digraph G {
     { "inventory.yaml" "survey.csv" } -> "hs" [ label = "ansible" ]
 
     { "virt.yaml" "env.yaml" } -> "main.tf" [ label = "virt2tf.py" ]
-    "main.tf" -> "lxd" [ label = "terraform" ]
+    "main.tf" -> { "lxd" "cluster-tf.yaml" } [ label = "terraform" ]
     "main.tf" -> { "authorized_keys" "provision iface config" "fix pam" "locale" "timezone" } [ label = "cloud-init" ]
-    "main.tf" -> { "hs" } [ label = "ansible" ]
+    "cluster-tf.yaml" -> "hs" [ label = "ansible" ]
     "lxd" -> "lxc"
     "lxc" -> "namespaces"
     "namespaces" -> "hs"
