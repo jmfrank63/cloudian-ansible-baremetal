@@ -107,10 +107,11 @@ def terraform_lxd(config, infra, nodes):
                     write_volume(tf, node, disk)
 
     for node in nodes:
+        node['image'] = infra['image']
         tf.write('''resource "lxd_container" "%(name)s" {
     remote = "%(host)s"
     name = "%(name)s"
-    image = "cloud-centos/7/amd64"
+    image = "%(image)s"
     ephemeral = false
 
     limits {
