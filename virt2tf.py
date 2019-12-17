@@ -122,18 +122,24 @@ def terraform_lxd(config, infra, nodes):
 ''' % node)
 
         # write provision interface
-        # TODO: br20 is hardcoded
+        if infra.get('infra', None) is None or infra['infra'].get('switches', None) is None:
+            # default lxd bridge
+            switch = 'lxcbr0'
+        else:
+            # find the frontend switch
+            switch = [ switch['name'] for switch in infra['infra']['switches'] if 'frontend' in switch['use'] ][0]
+
         tf.write('''    device {
         name = "provision"
         type = "nic"
         properties {
             name    = "provision"
             nictype = "bridged"
-            parent  = "br20"
+            parent  = "%(switch)s"
         }
     }
 
-''')
+''' % dict(switch=switch))
 
         for interface in node['network-config']:
             # pprint(interface)
@@ -274,12 +280,15 @@ locals {
 
 resource "null_resource" "ansible" {
     depends_on = [
-'''
+''')
 
     for node in nodes:
-        tf.write('''        "%(name)s",
+        tf.write('''        "lxd_container.%(name)s",
 ''' % node)
 
+    tf.write('''    ]
+
+''')
     tf.write('''    provisioner "remote-exec" {
         inline = ["true"]  // this is atually the command to execute. a trick, evidently.
 
@@ -371,6 +380,9 @@ def find_switch(switch, config, infra):
         if found is not None:
             return found
 
+    if 'infra' not in infra or 'switches' not in infra['infra']:
+        return 'lxcbr0'
+
     return find_by_name(switch, infra['infra']['switches'])
 
 
@@ -379,26 +391,23 @@ def check_infra(config, infra, nodes):
     for node in nodes:
         for interface in node['network-config']:
             # pprint(interface)
-            if 'switch' in interface:
-                switch = find_switch(interface['switch'], config, infra)
-                if switch is None:
-                    # the space before the dot is intentionally left in
-                    raise ValidationError( "%s's interface %s is connected to a non-existant switch %s ." %
-                                           (node['name'], interface['name'], interface['switch']) )
 
-                if isinstance(interface['use'], str):
-                    interface['use'] = [ interface['use'] ]
+            # find the switch that has this interface's use
+            use = interface['use']
 
-                for use in interface['use']:
-                    if not use in switch['use']:
-                        raise ValidationError( "%s's interface %s has use %r, but the switch it's connected to, "
-                                                "%s, has uses %r ." %
-                                            (node['name'], interface['name'], use,
-                                                switch['name'], switch['use']) )
+            switch = None
+            switches = ( config.get('infra', {}).get('switches', []) +
+                         infra.get('infra', {}).get('switches', []) )
 
-            else:
-                raise ValidationError( "%s's interface %s is not connected to a switch." %
-                                       (node['name'], interface['name']) )
+            for sw in switches:
+                if use in sw['use']:
+                    switch = sw
+                    break
+
+            if switch is None:
+                raise ValidationError('Cloud not find switch with use %r.' % use)
+
+            interface['switch'] = switch['name']
 
 
 def check_network(config, infra, nodes):
@@ -489,6 +498,7 @@ def main():
     check_infra(config, infra, nodes)
     check_network(config, infra, nodes)
 
+    # terraform-lxd becomes terraform_lxd
     f = globals()[infra['backend'].replace('-', '_')]
     f(config, infra, nodes)
 
