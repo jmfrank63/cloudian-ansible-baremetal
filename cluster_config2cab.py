@@ -168,10 +168,82 @@ def main():
 
     output = dict(cloudian=dict(children={}))
 
+    # CIC.txt
+    # TODO: support project directories
+    # TODO: template
+    cic = open('roles/pre-installer/files/CloudianInstallConfiguration.txt', 'w+')
+    cic.write('''INSTALL_APPEND_TO_ETC_HOSTS=yes
+INSTALL_CONFIGURE_CMC=yes
+INSTALL_CONFIGURE_SMTP_NOTIFICATION=yes
+INSTALL_CONFIG_FILE=./CloudianInstallConfiguration.txt
+INSTALL_CRED_SLAVES_PER_DC=2
+INSTALL_HOSTS_FILE=hosts.cloudian
+
+''')
+
+    cic.write('''cloudian_s3_domain=%(domain)s
+cloudian_cmc_domain=%(cmc-endpoint)s
+cloudian_admin_host=%(admin-endpoint)s
+
+''' % input['cluster'])
+
+    cic.write('''cloudian_cassandra_default_node_datacenter=%(name)s:%(name)s
+''' % input['cluster']['regions'][0]['data-centers'][0])
+
+    cic.write('''cloudian_cassandra_network_interface=%(name)s
+cloudian_credentials_network_interface=%(name)s
+cloudian_hyperstore_cassandra_interface=%(name)s
+cloudian_internal_network_interface=%(name)s
+cloudian_puppet_network_interface=%(name)s
+cloudian_qos_network_interface=%(name)s
+cloudian_redis_monitor_network_interface=%(name)s
+
+''' % [ iface for iface in input['cluster']['network-config'] if iface['use'] == 'backend' ][0])
+
+    data = {
+        'region-labels': ','.join([ region['name'] for region in input['cluster']['regions'] ]),
+        'regions': ','.join([ "region%d" % (i + 1) for i in range(len(input['cluster']['regions'])) ]),
+    }
+
+    cic.write('''cloudian_cluster_default_region=region1
+cloudian_cluster_region_labels=%(region-labels)s
+cloudian_cluster_regions=%(regions)s
+
+cloudian_configure_dnsmasq=no
+
+''' % data)
+
     # survey.csv
     csv_rows = []
 
-    for region in input['cluster']['regions']:
+    for index, region in enumerate(input['cluster']['regions']):
+        # more CIC
+        region['number'] = index + 1
+        region['ntp-server-list'] = ','.join(region['ntp-servers'])
+        region['end-points'] = ','.join(region['s3-endpoints'])
+        # TODO: 3 is hardcoded
+        region['replication'] = ','.join([ "%s:3" % data_center['name']
+                                           for data_center in region['data-centers'] ])
+        # [0]=\"DC10\" [1]=\"DC3\"
+        region['dcs'] = ' '.join([ '[%d]=\\"%s\\"' % (index, data_center['name'])
+                                   for index, data_center in enumerate(region['data-centers']) ])
+
+        cic.write('''###########
+# Region %(number)d: %(name)s
+cloudian_cluster_regionname_region%(number)d=%(name)s
+cloudian_datacenters_region%(number)d=(%(dcs)s)
+
+cloudian_accountinfo_replication_region%(number)d=%(replication)s
+cloudian_data_replication_region%(number)d=%(replication)s
+cloudian_monitoring_replication_region%(number)d=%(replication)s
+cloudian_reports_replication_region%(number)d=%(replication)s
+
+cloudian_ntp_time_server_region%(number)d=%(ntp-server-list)s
+cloudian_s3_domain_region%(number)d=%(end-points)s
+cloudian_s3_website_endpoint_region%(number)d=%(website-endpoint)s
+
+''' % region)
+
         region_network_config = deepcopy(cluster_network_config)
         # pprint(region_network_config)
         # print
