@@ -1,16 +1,16 @@
 digraph G {
     node [ shape=box, style=filled ];
 
-    "cluster.yaml" -> { "hs.yaml" "virt.yaml" } [ label = "split.py" ]
+    "main.yaml" -> { "cluster.yaml" "virt.yaml" } [ label = "split.py" ]
 
-    "hs.yaml" -> { "inventory.yaml" "survey.csv"  "ansible.iso" }[ label = "cluster2cab.py" ]
-    { "inventory.yaml" "survey.csv" } -> "hs" [ label = "ansible" ]
+    "cluster.yaml" -> { "inventory.yaml" "survey.csv"  "ansible.iso" }[ label = "cluster2cab.py" ]
+    "inventory.yaml" -> "ansible.iso" [ label = "build-iso.sh" ]
 
     { "virt.yaml" "env.yaml" } -> "main.tf" [ label = "virt2tf.py" ]
     "main.tf" -> { "lxd" "terraform.tfstate" } [ label = "terraform" ]
-    { "hs.yaml" "terraform.tfstate" } -> "cluster-tf.yaml" [ label = "tf2cluster.py" ]
+    { "inventory.yaml" "terraform.tfstate" } -> "inventory-fixed.yaml" [ label = "tf2cluster.py" ]
     "main.tf" -> { "authorized_keys" "provision iface config" "fix pam" "locale" "timezone" } [ label = "cloud-init" ]
-    "cluster-tf.yaml" -> "hs" [ label = "ansible" ]
+    { "inventory-fixed.yaml" "survey.csv" } -> "hs" [ label = "ansible" ]
     "lxd" -> "lxc"
     "lxc" -> "namespaces"
     "namespaces" -> "hs"
