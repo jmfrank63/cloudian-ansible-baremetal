@@ -2,6 +2,9 @@
 
 set -e
 
+# ansible is quote big, while some computers immpose a 50MiB size on virtual CD immages
+# this script removes unused ansible code to fit in that limit
+
 while [ $# -gt 0 ]; do
     case "$1" in
       -a|--all)

@@ -7,6 +7,7 @@ tools_directory: "/root/CloudianTools"
 preinstall_directory: "/etc/cloudian"
 
 network_scripts_dir: "/etc/sysconfig/network-scripts"
+# NOTE: only usefull for provisioning via switch?
 # this is the interface that is connected to the switch and the provision machine
 provision_interface: "eno1"
 # this interface will be used to identify the machine by blinking its lights

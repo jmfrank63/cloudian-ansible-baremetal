@@ -7,8 +7,6 @@ lib/
 local/
 share/
 tmp/
-# maybe I should commit this one instead :)
-TODO.txt
 # cloudian files
 CloudianHyperStore-*.bin
 cloudian_license.lic

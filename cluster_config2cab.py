@@ -22,7 +22,6 @@ def recursive_update(dst, src):
 def update(data, new_data):
     # we take each node's name in new_data, find it in data, and update that dictionary
     for node in new_data:
-        # pprint(node)
         name = node['name']
         try:
             obj = [ obj for obj in data if obj['name'] == name ][0]
@@ -161,6 +160,7 @@ def main():
     # region level
     # dc level
     # node level
+    # just use deepcopy() from the level above to start generating the level below
 
     cluster_network_config = input['cluster'].get('network-config', [])
     # pprint(cluster_network_config)
@@ -291,8 +291,8 @@ cloudian_s3_website_endpoint_region%(number)d=%(website-endpoint)s
         output['cloudian']['children'][dc_name] = dc
 
     open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
+    # TODO: support project directories
     csv.writer(open('roles/pre-installer/files/survey.csv', 'w+')).writerows(csv_rows)
-
 
 
 if __name__ == '__main__':
