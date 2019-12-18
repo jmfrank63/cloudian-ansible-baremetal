@@ -11,4 +11,4 @@ set -u
 
 
 ./bin/ansible-playbook --extra-vars 'run_from_orch=true' --extra-vars 'run_from_iso=false' \
-    --inventory-file "$project/inventory-fixed.yaml" --verbose deployCluster.yml "$@"
+    --inventory-file "$project/inventory-fixed.yaml" deployCluster.yml "$@"
