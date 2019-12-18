@@ -22,3 +22,8 @@
     executable: /bin/bash
     creates: "{{ staging_directory }}/RELEASENOTES"
   when: not run_from_iso|bool
+
+- name: Copy CIC preseed File
+  copy:
+    src:  "{{ role_path }}/files/preseed.txt"
+    dest: "{{ staging_directory }}/preseed.txt"

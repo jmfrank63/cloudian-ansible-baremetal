@@ -161,7 +161,7 @@ def main():
     # CIC.txt
     # TODO: support project directories
     # TODO: template
-    cic = open('roles/pre-installer/files/CloudianInstallConfiguration.txt', 'w+')
+    cic = open('roles/pre-installer/files/preseed.txt', 'w+')
     cic.write('''INSTALL_APPEND_TO_ETC_HOSTS=yes
 INSTALL_CONFIGURE_CMC=yes
 INSTALL_CONFIGURE_SMTP_NOTIFICATION=yes
