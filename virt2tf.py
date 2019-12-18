@@ -299,14 +299,6 @@ resource "null_resource" "ansible" {
             host        = "${lxd_container.%(name)s.ip_address}"
         }
     }
-
-    provisioner "local-exec" {
-        command = "./tf2cluster.py"
-    }
-
-    provisioner "local-exec" {
-        command = "./bin/ansible-playbook --inventory cluster-tf.yaml --extra-vars 'run_from_iso=false' --extra-vars 'run_from_orch=true' deployCluster.yml"
-    }
 }
 ''' % installer_node)
 

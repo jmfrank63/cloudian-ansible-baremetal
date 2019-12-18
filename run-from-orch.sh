@@ -1,7 +1,14 @@
 #! /bin/bash
 
-source bin/activate
-
 set -eu
+project=$1
+shift
 
-./local/bin/ansible-playbook --extra-vars 'run_from_iso=false' --inventory-file inventory/cluster.yaml --verbose deployCluster.yml "$@"
+# bin/activate references unbound variables
+set +u
+source bin/activate
+set -u
+
+
+./bin/ansible-playbook --extra-vars 'run_from_orch=true' --extra-vars 'run_from_iso=false' \
+    --inventory-file "$project/inventory-fixed.yaml" --verbose deployCluster.yml "$@"

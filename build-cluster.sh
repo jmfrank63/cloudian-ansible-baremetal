@@ -40,3 +40,8 @@ make PROJECT_DIR="$project" INFRA="$infra"
     export ANSIBLE_HOST_KEY_CHECKING=False
     terraform apply -auto-approve .
 )
+
+# update
+make PROJECT_DIR="$project" INFRA="$infra" "$project/inventory-fixed.yaml"
+
+./run-from-orch.sh "$project"
