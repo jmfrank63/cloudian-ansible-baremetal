@@ -1,7 +1,9 @@
 # kate: indent-width 2;
 
+# this si the backend we're going to use
 backend: terraform-lxd
 
+# everything from here is backend specific
 providers:
 - name: demo-hv1
   scheme: https
@@ -19,6 +21,10 @@ disk-pools:
   driver: dir
   source: /var/lib/snapd/hostfs/mnt/kvm/lxd/storage-pools/local
 
+
+# the alias for the disk image for the node's system
+# lxc image import 2d8190b364998ba6edfbcd08509ffce3433f8e84c864a394e9f5c305bacf52f8.tar.gz --alias cloud-centos/7/amd64
+image: cloud-centos/7/amd64
 
 infra:
   switches:
