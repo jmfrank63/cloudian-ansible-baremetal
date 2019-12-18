@@ -37,6 +37,7 @@ cluster:
     fs: ext4
     mount-point: /
 
+  # these are the data rives, there will be 4 of them
   - name: data
     type: raw
     fs: ext4
@@ -47,21 +48,18 @@ cluster:
   #########################
   network-config:
   # we used to allow implicit definition of physical interfaces in the bonds, but we need the type
-  - name:    eth0
-    type:    eth
-    switch:  br20
-    prefix:  24
-    use:     frontend
+  - name:   eth0
+    type:   eth
+    prefix: 24
+    use:    frontend
 
   - name:   eth1
     type:   eth
-    switch: br10
     prefix: 24
     use:    backend
 
   - name:   ipmi
     type:   ipmi  # TODO: for the moment this is ignored
-    switch: br20
     prefix: 24
     use:    management  # TODO: this could be implied from name
 
@@ -81,24 +79,24 @@ cluster:
 
   #########################
   regions:
-  - name: region1
+  - name: eu-1
     default: true
     # we do a per-region NTP because we want to prioritize syncing time across the entire region
     # instead of each data-center.
-    ntpservers:
+    ntp-servers:
     - 0.centos.pool.ntp.org
     - 1.centos.pool.ntp.org
     - 2.centos.pool.ntp.org
     - 3.centos.pool.ntp.org
-    s3endpoints:
-    - s3-region1.demo3.cloudian.eu
-    websiteendpoint: s3-website-region1.demo3.cloudian.eu
+    s3-endpoints:
+    - s3-eu-1.demo3.cloudian.eu
+    website-endpoint: s3-website-eu-1.demo3.cloudian.eu
 
     #######################
     data-centers:
     - name: DC10
       container-config:
-        host: demo-hv1
+        host: nimbus
 
       #####################
       nodes:
