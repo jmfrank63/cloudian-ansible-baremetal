@@ -1,12 +1,16 @@
 # cloudian-ansible-baremetal
-Ansible Playbook to deploy Cloudian HyperStore on baremetal
+Ansible Playbook to deploy Cloudian HyperStore.
 
-> This Playbook has been written with Cloudian appliances in mind, but should theoretically work for any hardware or virtualized environment.
-> For power mgmt and provisioning of the OS layer eg. *Foreman*, *Spacewalk*+*Cobbler*, *MaaS* or a plain *PXE-boot server* can be used. For all those an inventory already exists.
+> This Playbook has been written with Cloudian appliances in mind, but should theoretically
+> work for any hardware or virtualized environment.
+> For power mgmt and provisioning of the OS layer eg. *Foreman*, *Spacewalk*+*Cobbler*, *MaaS* or
+> a plain *PXE-boot server* can be used. For all those an inventory already exists.
 
 NOTE:
-> Playbook is intended to be used for initial deployment of (typically large scale) Clusters "*behind the rack*". Meaning connect as many nodes as you can to a temporary
-> switch locally (eg. per DC) to supply nodes their configuration via Ansible. The `cleanup.yml` playbook can be used at the end to destroy the temporary provision network.
+> Playbook is intended to be used for initial deployment of (typically large scale) Clusters
+> "*behind the rack*". Meaning connect as many nodes as you can to a temporary
+> switch locally (eg. per DC) to supply nodes their configuration via Ansible. The `cleanup.yml`
+> playbook can be used at the end to destroy the temporary provision network.
 > Configuration can be supplied in 1-go, *dc-by-dc* or *node-by-node*. See FAQ for more details.
 
 ## Features

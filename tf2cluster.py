@@ -3,7 +3,6 @@
 # the good thing about standards...
 import json
 import yaml
-# from pprint import pprint
 import sys
 
 # this tool fixes the ouput of cluster_config2tab.py

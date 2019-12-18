@@ -5,7 +5,6 @@ import yaml
 import yamlordereddictloader as yodl
 
 import sys
-from pprint import pprint
 # for keeping definitions' order
 from collections import OrderedDict
 from copy import deepcopy as copy
@@ -15,7 +14,6 @@ def update(data, new_data):
     # data and new_data are not a dictionaries anymore, so we take each node's name in new_data, find it in data
     # and update that dictionary
     for node in new_data:
-        # pprint(node)
         name = node['name']
         try:
             obj = [ obj for obj in data if obj['name'] == name ][0]

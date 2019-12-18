@@ -34,8 +34,6 @@ def update(data, new_data):
 def convert(input, node):  # (List[Dict], Dict)
     output = dict(interfaces={})
 
-    # pprint(input)
-
     for interface_config in input:  # Dict
         name = interface_config['name']  # str
 
@@ -45,9 +43,6 @@ def convert(input, node):  # (List[Dict], Dict)
             continue
 
         use = interface_config.get('use', None)  # str
-
-        # pprint(interface_config)
-        # print(name)
 
         if name == 'ipmi':
             # allow non declaration for virtual clusters
@@ -64,8 +59,6 @@ def convert(input, node):  # (List[Dict], Dict)
                 output['bmc_gateway'] = interface_config['gateway']
 
             continue
-
-        # pprint(interface_config)
 
         if interface_config['type'] == 'bond':
             # this is an special case, because at least two more interfaces
@@ -132,7 +125,6 @@ def convert(input, node):  # (List[Dict], Dict)
 
         output['interfaces'][name] = config
 
-    # pprint(output)
     return output
 
 
@@ -163,8 +155,6 @@ def main():
     # just use deepcopy() from the level above to start generating the level below
 
     cluster_network_config = input['cluster'].get('network-config', [])
-    # pprint(cluster_network_config)
-    # print
 
     output = dict(cloudian=dict(children={}))
 
@@ -245,38 +235,19 @@ cloudian_s3_website_endpoint_region%(number)d=%(website-endpoint)s
 ''' % region)
 
         region_network_config = deepcopy(cluster_network_config)
-        # pprint(region_network_config)
-        # print
 
         for dc_config in region['data-centers']:
             dc_name = dc_config['name']
 
             dc_network_config = deepcopy(region_network_config)
             recursive_update(dc_network_config, dc_config.get('network-config', []))
-            # pprint(dc_network_config)
-            # print
 
             # Ansible expects nodes declared as 'hosts'
             dc = dict(hosts={})
 
             for node in dc_config['nodes']:
                 node_network_config = deepcopy(dc_network_config)
-                # pprint(node_network_config)
-                # print
-
-                # pprint(node)
-                # print
-
-                # update(node_network_config, node)
-                # pprint(node_network_config)
-                # print
-                # TODO:
-                # node_network_config['ansible_node'] =
-
-                # pprint(node_network_config)
-
                 node_info = convert(node_network_config, node)
-                # pprint(node_info)
                 dc['hosts'][node['name']] = node_info
 
                 if node.get('installer-node', False):
