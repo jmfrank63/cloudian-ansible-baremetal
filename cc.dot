@@ -7,7 +7,8 @@ digraph G {
     { "inventory.yaml" "survey.csv" } -> "hs" [ label = "ansible" ]
 
     { "virt.yaml" "env.yaml" } -> "main.tf" [ label = "virt2tf.py" ]
-    "main.tf" -> { "lxd" "cluster-tf.yaml" } [ label = "terraform" ]
+    "main.tf" -> { "lxd" "terraform.tfstate" } [ label = "terraform" ]
+    { "hs.yaml" "terraform.tfstate" } -> "cluster-tf.yaml" [ label = "tf2cluster.py" ]
     "main.tf" -> { "authorized_keys" "provision iface config" "fix pam" "locale" "timezone" } [ label = "cloud-init" ]
     "cluster-tf.yaml" -> "hs" [ label = "ansible" ]
     "lxd" -> "lxc"
