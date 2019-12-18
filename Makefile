@@ -12,8 +12,8 @@ $(PROJECT_DIR)/main.tf: $(PROJECT_DIR)/virt.yaml infra/$(INFRA).yaml virt2tf.py
 $(PROJECT_DIR)/inventory.yaml: $(PROJECT_DIR)/cluster.yaml cluster_config2cab.py
 	./cluster_config2cab.py $(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/inventory.yaml
 
-$(PROJECT_DIR)/inventory-fixed.yaml: $(PROJECT_DIR)/inventory.yaml tf2cluster.py
-	./tf2cluster.py $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/inventory-fixed.yaml
+$(PROJECT_DIR)/inventory-fixed.yaml: $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/terraform.tfstate tf2cluster.py
+	./tf2cluster.py $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/terraform.tfstate $(PROJECT_DIR)/inventory-fixed.yaml
 
 cc.png: cc.dot
 	dot -Tpng $< > $@
