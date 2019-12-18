@@ -8,3 +8,4 @@ CloudianHyperStore-*.bin
 cloudian_license.lic
 facts/*
 deployCluster.retry
+roles/pre-installer/files/survey.csv
