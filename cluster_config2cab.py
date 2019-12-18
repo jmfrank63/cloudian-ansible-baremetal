@@ -144,6 +144,12 @@ def find_by_attr(key, value, list):
 
 
 def main():
+    if len(sys.argv) != 3:
+        print "Usage: %s [cluster.yaml] [inventory.yaml]" % sys.argv[0]
+        print
+        print "Converts a cluster definition to an Ansible inventory."
+        sys.exit(1)
+
     input = yaml.load(open(sys.argv[1]))
 
     # plan: I'm not aiming for purity, so we just generate a yaml inventory with

@@ -88,6 +88,12 @@ def split_network_config(network_config):
 
 
 def main():
+    if len(sys.argv) != 4:
+        print "Usage: %s [main.yaml] [cluster.yaml] [virt.yaml]" % sys.argv[0]
+        print
+        print "Splits a full virtualizable cluster into a cluster and a virtualization definitions."
+        sys.exit(1)
+
     # read the input
     data = yaml.load(open(sys.argv[1]), Loader=yodl.Loader)
 
@@ -183,8 +189,8 @@ def main():
 
     ############################################################################
     # write 2 files, one for virtualization, another for HS
-    yaml.dump(virt_data, open('virt.yaml', 'w+'), Dumper=yodl.Dumper, default_flow_style=False)
-    yaml.dump(hs_data,   open('hs.yaml',   'w+'), Dumper=yodl.Dumper, default_flow_style=False)
+    yaml.dump(hs_data,   open(sys.argv[2], 'w+'), Dumper=yodl.Dumper, default_flow_style=False)
+    yaml.dump(virt_data, open(sys.argv[3], 'w+'), Dumper=yodl.Dumper, default_flow_style=False)
 
 
 if __name__ == '__main__':

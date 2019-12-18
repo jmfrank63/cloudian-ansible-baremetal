@@ -25,10 +25,10 @@ def update(data, new_data):
             obj.update(node)
 
 
-def terraform_lxd(config, infra, nodes):
+def terraform_lxd(config, infra, nodes, backend_files):
     # write main.tf
     # TODO: use a template system
-    tf = open('main.tf', 'w+')
+    tf = open(backend_files[0], 'w+')
     tf.write('''provider "lxd" {
     generate_client_certificates = true
     accept_remote_certificate    = true
@@ -421,6 +421,12 @@ def check_network(config, infra, nodes):
 
 
 def main():
+    if len(sys.argv) != 4:
+        print "Usage: %s [virt.yaml] [infra.yaml] [backend-files ...]" % sys.argv[0]
+        print
+        print "Generates backend configuration files/scripts based on the desired cluster and the available infra."
+        sys.exit(1)
+
     # read the input
     config = yaml.load(open(sys.argv[1]), Loader=yodl.Loader)
     # pprint(config)
@@ -500,7 +506,8 @@ def main():
 
     # terraform-lxd becomes terraform_lxd
     f = globals()[infra['backend'].replace('-', '_')]
-    f(config, infra, nodes)
+    backend_files = sys.argv[3:]
+    f(config, infra, nodes, backend_files)
 
 
 def copy_interface_use(interface, interfaces):
