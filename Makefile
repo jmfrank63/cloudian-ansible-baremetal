@@ -1,13 +1,16 @@
-all: cluster.yaml main.tf cc.png
+# define PROJECT_DIR
+# define INFRA
 
-hs.yaml virt.yaml: examples/demo3.yaml split.py
-	./split.py examples/demo3.yaml
+all: $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/main.tf cc.png
 
-main.tf: virt.yaml infras/ams.yaml virt2tf.py
-	./virt2tf.py virt.yaml infras/ams.yaml
+$(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/virt.yaml: $(PROJECT_DIR)/main.yaml split.py
+	./split.py $(PROJECT_DIR)/main.yaml $(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/virt.yaml
 
-cluster.yaml: hs.yaml cluster_config2cab.py
-	./cluster_config2cab.py hs.yaml cluster.yaml
+$(PROJECT_DIR)/main.tf: $(PROJECT_DIR)/virt.yaml infra/$(INFRA).yaml virt2tf.py
+	./virt2tf.py $(PROJECT_DIR)/virt.yaml infra/$(INFRA).yaml $(PROJECT_DIR)/main.tf
+
+$(PROJECT_DIR)/inventory.yaml: $(PROJECT_DIR)/cluster.yaml cluster_config2cab.py
+	./cluster_config2cab.py $(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/inventory.yaml
 
 cc.png: cc.dot
 	dot -Tpng $< > $@
