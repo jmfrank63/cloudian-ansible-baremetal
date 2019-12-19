@@ -10,4 +10,4 @@
   script: "prepDisks --format"
   args:
     creates: "{{ tools_directory }}/fslist.txt"
-  when: ansible_distribution_major_version == "7"
+  when: ansible_distribution_major_version == "7" and not run_from_orch|bool
