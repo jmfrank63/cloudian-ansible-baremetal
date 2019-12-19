@@ -95,7 +95,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
                     for number in range(1, disk['count'] + 1):
 
                         new_disk = copy(disk)
-                        new_disk['mount-point'] = (disk['mount-point'] + '%03d') % number
+                        new_disk['mount-point'] = (disk['mount-point'] + '%d') % number
                         new_disk['disk-name'] = disk_name(new_disk)
 
                         write_volume(tf, node, new_disk)
@@ -164,7 +164,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
                 if 'count' in disk:
                     for number in range(1, disk['count'] + 1):
                         new_disk = copy(disk)
-                        new_disk['mount-point'] = (disk['mount-point'] + '%03d') % number
+                        new_disk['mount-point'] = (disk['mount-point'] + '%d') % number
                         new_disk['disk-name'] = disk_name(new_disk)
 
                         write_disk(tf, node, new_disk)
@@ -181,7 +181,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
                 for number in range(1, disk['count'] + 1):
                     new_disk = copy(disk)
                     new_disk.update(node)
-                    new_disk['mount-point'] = (disk['mount-point'] + '%03d') % number
+                    new_disk['mount-point'] = (disk['mount-point'] + '%d') % number
                     new_disk['disk-name'] = disk_name(new_disk)
 
                     tf.write('''        "lxd_volume.%(name)s-%(disk-name)s",
