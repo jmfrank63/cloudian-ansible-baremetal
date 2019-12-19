@@ -8,3 +8,13 @@
   lineinfile:
    path: /etc/hosts
    line: "{{ net_frontend_addr }}\t{{ hostname_nonfqdn }}"
+
+# either lxc or cloud-init ar putting lines in /etc/hosts like
+# 127.0.1.1       demo3-node2
+# remove them
+- name: Remove named localhost
+  lineinfile:
+    path: /etc/hosts
+    regexp: "127.0.1.1[ \t]+{{ hostname_nonfqdn }}"
+    state: absent
+  when: run_from_orch|bool
