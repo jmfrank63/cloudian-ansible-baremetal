@@ -8,6 +8,7 @@ import sys
 # for keeping definitions' order
 from collections import OrderedDict
 from copy import deepcopy as copy
+from os.path import dirname, join as path_join
 
 
 def update(data, new_data):
@@ -192,7 +193,12 @@ def terraform_lxd(config, infra, nodes, backend_files):
 
 
         # node's coda
-        data = {'installer-node': str(node['installer-node']).lower() }
+        pub_key_file = path_join(dirname(backend_files[0]), 'cloudian-installation-key.pub')
+        install_key = open(pub_key_file).read()
+        data = {
+            'installer-node': str(node['installer-node']).lower(),
+            'install-key': install_key,
+        }
 
         # user.usr-data is config for cloud-config
 
@@ -219,7 +225,7 @@ timezone: Europe/Amsterdam
 users:
   - name: root
     ssh_authorized_keys:
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCVS7y0YUA6JmbI9cTNPyZTOY3NoHSu0w5Lp5f+4KNMXXygjduJqUY1WoDgwPafSyMjvWjOgju4GWB53RvU9SBHr1LdJEn86BQ7PVrekghHUGgNQKAnyNw8mHkl8oAQK2qRHu81q3vB3DZ7/EcjlnPmuwqJCNraiMi7sZ1YSzwQobXImaKav/9gaRDIW3ONzZjMQs70HNI4dyJffG1IlgCSQzxuFMD3KZw/htGGkGOqwBin+5qgoZzp1i0jJL4adnet83WCAanHnsm86QnweUBRQOH5JuVflimTw60mk7SzPCubELSXIwYUxaM4SoaNSp5cozSBwggEqaUPkayGvuKz tf-lxc-ans@builhost1
+    - %(install-key)s
 ''' % data)
 
         # print(config['cluster']['ssh-authorized-keys'])
@@ -293,7 +299,7 @@ resource "null_resource" "ansible" {
         connection {
             type        = "ssh"
             user        = "root"
-            private_key = "${file("ssh/id_rsa")}"
+            private_key = "${file("cloudian-installation-key")}"
             host        = "${lxd_container.%(name)s.ip_address}"
         }
     }
