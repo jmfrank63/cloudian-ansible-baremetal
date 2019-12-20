@@ -22,14 +22,17 @@
 
 # the ISO carries a pre generated key because every ansible run is independent
 # (it occurs locally on each node)
+# orch mode also generates an 'external' key pair
 - name: Copy Cloudian Installer SSH priv key
   copy:
-    src: "{{ role_path }}/files/cloudian-installation-key"
+    src: "{{ project }}/cloudian-installation-key"
     dest: "{{ staging_directory }}/cloudian-installation-key"
-  when: run_from_iso|bool
+    mode: 0600
+  when: run_from_iso|bool or run_from_orch|bool
 
 - name: Copy Cloudian Installer SSH pub key
   copy:
-    src: "{{ role_path }}/files/cloudian-installation-key.pub"
+    src: "{{ project }}/cloudian-installation-key.pub"
     dest: "{{ staging_directory }}/cloudian-installation-key.pub"
-  when: run_from_iso|bool
+    mode: 0644
+  when: run_from_iso|bool or run_from_orch|bool
