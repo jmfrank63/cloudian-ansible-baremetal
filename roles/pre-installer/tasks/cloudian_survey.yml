@@ -11,6 +11,6 @@
 # so just copy over
 - name: Copy Survey File
   copy:
-    src:  "{{ role_path }}/files/survey.csv"
+    src:  "{{ project }}/survey.csv"
     dest: "{{ staging_directory }}/survey.csv"
   when: run_from_iso|bool or run_from_orch|bool

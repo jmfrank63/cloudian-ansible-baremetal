@@ -135,10 +135,10 @@ def find_by_attr(key, value, list):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print "Usage: %s [cluster.yaml] [inventory.yaml]" % sys.argv[0]
+    if len(sys.argv) != 5:
+        print "Usage: %s [cluster.yaml] [survey.csv] [preseed.conf] [inventory.yaml]" % sys.argv[0]
         print
-        print "Converts a cluster definition to an Ansible inventory."
+        print "Converts a cluster definition to several files: a survey file; a Cloudian Installer preseed; and an Ansible inventory."
         sys.exit(1)
 
     input = yaml.load(open(sys.argv[1]))
@@ -161,7 +161,7 @@ def main():
     # CIC.txt
     # TODO: support project directories
     # TODO: template
-    cic = open('roles/pre-installer/files/preseed.txt', 'w+')
+    cic = open(sys.argv[3], 'w+')
     cic.write('''INSTALL_APPEND_TO_ETC_HOSTS=yes
 INSTALL_CONFIGURE_CMC=yes
 INSTALL_CONFIGURE_SMTP_NOTIFICATION=yes
@@ -261,9 +261,9 @@ cloudian_s3_website_endpoint_region%(number)d=%(website-endpoint)s
 
         output['cloudian']['children'][dc_name] = dc
 
-    open(sys.argv[2], 'w+').write(yaml.dump(output, default_flow_style=False))
+    open(sys.argv[4], 'w+').write(yaml.dump(output, default_flow_style=False))
     # TODO: support project directories
-    csv.writer(open('roles/pre-installer/files/survey.csv', 'w+')).writerows(csv_rows)
+    csv.writer(open(sys.argv[2], 'w+')).writerows(csv_rows)
 
 
 if __name__ == '__main__':

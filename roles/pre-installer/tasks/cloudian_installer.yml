@@ -25,5 +25,5 @@
 
 - name: Copy CIC preseed File
   copy:
-    src:  "{{ role_path }}/files/preseed.txt"
-    dest: "{{ staging_directory }}/preseed.txt"
+    src:  "{{ project }}/preseed.conf"
+    dest: "{{ staging_directory }}/preseed.conf"

@@ -5,6 +5,8 @@ project=$(shell basename $(PROJECT_DIR))
 
 MAIN=$(PROJECT_DIR)/main.yaml
 CLUSTER=$(PROJECT_DIR)/cluster.yaml
+SURVEY=$(PROJECT_DIR)/survey.csv
+PRESEED=$(PROJECT_DIR)/preseed.conf
 VIRT=$(PROJECT_DIR)/virt.yaml
 INVENTORY=$(PROJECT_DIR)/inventory.yaml
 FIXED=$(PROJECT_DIR)/inventory-fixed.yaml
@@ -26,8 +28,8 @@ $(CLUSTER) $(VIRT): $(MAIN) split.py
 $(TF_FILE): $(VIRT) infra/$(INFRA).yaml $(PUB_KEY) virt2tf.py
 	./virt2tf.py $(VIRT) infra/$(INFRA).yaml $(TF_FILE)
 
-$(INVENTORY): $(CLUSTER) cluster_config2cab.py
-	./cluster_config2cab.py $(CLUSTER) $(INVENTORY)
+$(SURVEY) $(PRESEED) $(INVENTORY): $(CLUSTER) cluster_config2cab.py
+	./cluster_config2cab.py $(CLUSTER) $(SURVEY) $(PRESEED) $(INVENTORY)
 
 $(FIXED): $(INVENTORY) $(TF_STATE) tf2cluster.py
 	./tf2cluster.py $(INVENTORY) $(TF_STATE) $(FIXED)
