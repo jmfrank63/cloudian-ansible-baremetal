@@ -1,19 +1,40 @@
 # define PROJECT_DIR
 # define INFRA
 
-all: $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/main.tf cc.png
+project=$(shell basename $(PROJECT_DIR))
 
-$(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/virt.yaml: $(PROJECT_DIR)/main.yaml split.py
-	./split.py $(PROJECT_DIR)/main.yaml $(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/virt.yaml
+MAIN=$(PROJECT_DIR)/main.yaml
+CLUSTER=$(PROJECT_DIR)/cluster.yaml
+VIRT=$(PROJECT_DIR)/virt.yaml
+INVENTORY=$(PROJECT_DIR)/inventory.yaml
+FIXED=$(PROJECT_DIR)/inventory-fixed.yaml
 
-$(PROJECT_DIR)/main.tf: $(PROJECT_DIR)/virt.yaml infra/$(INFRA).yaml virt2tf.py
-	./virt2tf.py $(PROJECT_DIR)/virt.yaml infra/$(INFRA).yaml $(PROJECT_DIR)/main.tf
+TF_FILE=$(PROJECT_DIR)/main.tf
+TF_STATE=$(PROJECT_DIR)/terraform.tfstate
 
-$(PROJECT_DIR)/inventory.yaml: $(PROJECT_DIR)/cluster.yaml cluster_config2cab.py
-	./cluster_config2cab.py $(PROJECT_DIR)/cluster.yaml $(PROJECT_DIR)/inventory.yaml
+PRV_KEY=$(PROJECT_DIR)/cloudian-installation-key
+PUB_KEY=$(PROJECT_DIR)/cloudian-installation-key.pub
 
-$(PROJECT_DIR)/inventory-fixed.yaml: $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/terraform.tfstate tf2cluster.py
-	./tf2cluster.py $(PROJECT_DIR)/inventory.yaml $(PROJECT_DIR)/terraform.tfstate $(PROJECT_DIR)/inventory-fixed.yaml
+
+all: $(INVENTORY) $(TF_FILE) \
+	$(PRV_KEY) $(PUB_KEY) \
+	cc.png
+
+$(CLUSTER) $(VIRT): $(MAIN) split.py
+	./split.py $(MAIN) $(CLUSTER) $(VIRT)
+
+$(TF_FILE): $(VIRT) infra/$(INFRA).yaml $(PUB_KEY) virt2tf.py
+	./virt2tf.py $(VIRT) infra/$(INFRA).yaml $(TF_FILE)
+
+$(INVENTORY): $(CLUSTER) cluster_config2cab.py
+	./cluster_config2cab.py $(CLUSTER) $(INVENTORY)
+
+$(FIXED): $(INVENTORY) $(TF_STATE) tf2cluster.py
+	./tf2cluster.py $(INVENTORY) $(TF_STATE) $(FIXED)
+
+$(PRV_KEY) $(PUB_KEY):
+	# TODO: PROJECT_DIR is 'projects/demo3/', make it 'demo3'
+	ssh-keygen -v -b 2048 -t rsa -f $(PRV_KEY) -q -N '' -C "cloudian-installation-key@$(project)"
 
 cc.png: cc.dot
 	dot -Tpng $< > $@
