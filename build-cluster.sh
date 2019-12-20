@@ -34,6 +34,7 @@ if ! [ -f "infra/${infra}.yaml" ]; then
 fi
 
 make PROJECT_DIR="$project" INFRA="$infra"
+ssh-add "$project/cloudian-installation-key"
 
 (
     cd "$project"
