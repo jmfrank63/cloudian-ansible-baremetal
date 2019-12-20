@@ -43,7 +43,7 @@ cluster:
     fs: ext4
     count: 4
     size: 4096
-    mount-point: /cloudian  # %03d -> /cloudian001
+    mount-point: /cloudian  # %d -> /cloudian1
 
   #########################
   network-config:
