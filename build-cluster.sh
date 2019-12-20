@@ -39,8 +39,7 @@ ssh-add "$project/cloudian-installation-key"
 (
     cd "$project"
 
-    ln -svf ../../.terraform .
-    ln -svf ../../ssh .
+    ln --symbolic --force ../../.terraform .
 
     terraform init
     export ANSIBLE_HOST_KEY_CHECKING=False
