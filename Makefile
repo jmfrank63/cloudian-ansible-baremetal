@@ -38,3 +38,9 @@ $(PRV_KEY) $(PUB_KEY):
 
 cc.png: cc.dot
 	dot -Tpng $< > $@
+
+clean:
+	rm --force $(CLUSTER) $(VIRT) $(INVENTORY) $(FIXED)
+
+really-clean: clean
+	rm --force $(TF_FILE) $(TF_STATE) $(PRV_KEY) $(PUB_KEY)
