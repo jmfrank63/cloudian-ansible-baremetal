@@ -7,19 +7,30 @@
 # but at some point we will need to keep a small sub set that makes sense
 
 cluster:
+  # this will be used for many automatically generated pieces, keep it same as prokject
   name: demo3
+
+  # you know these
   domain: demo3.cloudian.eu
   admin-endpoint: admin.demo3.cloudian.eu
   cmc-endpoint: cmc.demo3.cloudian.eu
+
+  # ignored for the moment
   use-hsh: false
   root-password: x
   cmc-password: x
+
+  # here you can add any public keys you might want. an installer key will be generated
+  # remove the example key, or I'll have access to all you uclusters ]:-)
   ssh-authorized-keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDa0qBwFcY84k7dTkd4fX1De2QYGtY6aK6OCsEYH/gPSvHb59JvCsS7BnhrkSa7JK0vdv2h1/xbs1JajsMcNjdHrNwHlA+XPK9dPf4Op1HqTfAQzJxo+w1o1Ff5kXbRtyKb6ZWc3r2HjndIvIxN5t2NgGZ20oZji4CiB0MHEH2AjgUie1D25NQAg7QUF/D2en5PbAyovbA7q3VW6IFMQhAfhBtYcQO8xxdymrMCB+y3mZFsMs2BjpDtbFLiSAjwcy9mx5KIyDqA+k8qlV1ayuDX6WFQoxCGQ2S62+Du5TTE4TOP9kmoyM160IyboN/7lRb2oMeaho06tFGFtkqSSruX mdione@nimbus
 
   # TODO: allow g Gb GB GiB
 
   #########################
+  # the layout for the disks.
+  # LXC already presents the root partition based in the system's image,
+  # so for the moment it can be absent and will be ignored anyways.
   disk-config:
   - name: ssd1
     type: raw
@@ -37,20 +48,31 @@ cluster:
     fs: ext4
     mount-point: /
 
-  # these are the data rives, there will be 4 of them
+  # these are the data drives, there will be 4 of them
   - name: data
     type: raw
+    # LXC does not provide disk images, but volumes. fs and size are ignored
+    # and all data disks share the same partition (the one holdinh the storage pool)
     fs: ext4
-    count: 4
     size: 4096
+    count: 4
     mount-point: /cloudian  # %d -> /cloudian1
 
   #########################
+  # interface definitions
+  # in the future we will support bonding and vlans, altho they will be faked
+
+  # network-config can be defined at cluster, region, dc or node level
+  # if defined at several levels, they're merged,
+  # with more specific definitions overwriting more general ones
   network-config:
-  # we used to allow implicit definition of physical interfaces in the bonds, but we need the type
   - name:   eth0
     type:   eth
+    # the IP prefix
     prefix: 24
+    # remember the use parameter in the infra's switch?
+    # this is how we connect virtual interfaces to the infra
+    # the names are kinda arbitrary, but frontend, backend and management are special
     use:    frontend
 
   - name:   eth1
@@ -63,6 +85,7 @@ cluster:
     prefix: 24
     use:    management  # TODO: this could be implied from name
 
+
   #########################
   # this defines the parameters for the node's resources, other types of infra elements have their own
   # TODO: move to ams.yaml?
@@ -70,14 +93,10 @@ cluster:
     cpus: 4
     memory: 8  # in GiB
 
-    # nics should be extracted from network-config
-    # in this case, the devices to list are bond0's and bond1's slaves
-    # but we still need to specify stuff
-    # so it could be specified here or in network-config
-    # in fact, network-config is better because it can be DC specific
-
 
   #########################
+  # now more HyperStore parameters
+  # regions -> DCs -> hosts
   regions:
   - name: eu-1
     default: true
@@ -88,20 +107,25 @@ cluster:
     - 1.centos.pool.ntp.org
     - 2.centos.pool.ntp.org
     - 3.centos.pool.ntp.org
+
+    # these are not ssumed to be based on the region name, you have to provide them
     s3-endpoints:
     - s3-eu-1.demo3.cloudian.eu
+
     website-endpoint: s3-website-eu-1.demo3.cloudian.eu
 
     #######################
     data-centers:
     - name: DC10
       container-config:
+        # this defines which LXD host will hold this DC. please modify
         host: nimbus
 
       #####################
       nodes:
       - name: demo3-node1
         installer-node: true
+        # here you assign IPs to the interfaces based on their use.
         frontend:   10.254.254.231
         backend:    10.230.230.1
 
