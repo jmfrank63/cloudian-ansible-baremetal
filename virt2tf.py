@@ -229,7 +229,12 @@ users:
 ''' % data)
 
         # print(config['cluster']['ssh-authorized-keys'])
-        for key in config['cluster'].get('ssh-authorized-keys', []):
+        auth_keys = config['cluster'].get('ssh-authorized-keys', [])
+        if auth_keys is None:
+            # the key was persent but it had no data
+            auth_keys = []
+
+        for key in auth_keys:
             tf.write('''      - %(key)s
 ''' % dict(key=key))
 
