@@ -7,8 +7,8 @@ fi
 
 set -eu
 
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 [project_dir] [infra] [hs_version]"
+if [ "$#" -lt 3 ]; then
+    echo "Usage: $0 [project_dir] [infra] [hs_version] [ansible_args ...]"
     exit 1
 fi
 
