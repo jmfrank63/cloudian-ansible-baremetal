@@ -4,6 +4,7 @@
 - name: Copy Cloudian HyperStore installer
   copy:
     src: "{{ role_path }}/files/CloudianHyperStore-{{ hyperstore_version }}.bin"
+    local_follow: true  # just in case the local file is a symlink
     dest: "{{ staging_directory }}"
     mode: 0755
   when: not run_from_iso|bool
@@ -13,6 +14,7 @@
   copy:
     src: "{{ role_path }}/files/cloudian_license.lic"
     dest: "{{ staging_directory }}"
+    local_follow: true  # just in case the local file is a symlink
   when: not run_from_iso|bool
 
 - name: Extract Installer .bin
