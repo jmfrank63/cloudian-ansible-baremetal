@@ -211,6 +211,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
         tf.write('''    config {
         boot.autostart = true
 
+        user.access_interface = "provision"
         user.cloudian.installer = %(installer-node)s
         user.user-data = <<EOF
 #cloud-config
