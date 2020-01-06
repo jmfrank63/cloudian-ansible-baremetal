@@ -56,10 +56,6 @@ ssh-add "$project/cloudian-installation-key"
 )
 
 # rewrite with the IPs offered via DHCP
-# but only onec, as TF seems to change them from time to time
-# beats the purpose of a Makefile, but oh well...
-if ! [ -f "$project/inventory-fixed.yaml" ]; then
-    make PROJECT_DIR="$project" INFRA="$infra" "$project/inventory-fixed.yaml"
-fi
+make PROJECT_DIR="$project" INFRA="$infra" "$project/inventory-fixed.yaml"
 
 ./run-from-orch.sh "$project" "$hs_version"
