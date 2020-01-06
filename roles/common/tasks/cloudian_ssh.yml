@@ -5,7 +5,7 @@
     user: root
     state: present
     key: "{{ hostvars[groups['installer-node'][0]]['cloudian_installation_key']['content'] | b64decode }}"
-  when: not run_from_iso|bool
+  when: not run_from_iso|bool and not run_from_orch|bool
 
 # we read it so we can make sure the contents is present instead of blindly overwriting the file
 - name: Read Generated SSH pub key
