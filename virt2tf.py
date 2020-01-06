@@ -113,7 +113,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
     image = "%(image)s"
     ephemeral = false
 
-    limits {
+    limits = {
         cpu = %(cpus)d
         memory = "%(memory)dGB"
     }
@@ -131,7 +131,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
         tf.write('''    device {
         name = "provision"
         type = "nic"
-        properties {
+        properties = {
             name    = "provision"
             nictype = "bridged"
             parent  = "%(switch)s"
@@ -147,7 +147,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
         type = "nic"
 ''' % interface)
             if 'switch' in interface:
-                tf.write('''        properties {
+                tf.write('''        properties = {
             name    = "%(name)s"
             nictype = "bridged"
             parent  = "%(switch)s"
@@ -185,7 +185,7 @@ def terraform_lxd(config, infra, nodes, backend_files):
                     new_disk['mount-point'] = (disk['mount-point'] + '%d') % number
                     new_disk['disk-name'] = disk_name(new_disk)
 
-                    tf.write('''        "lxd_volume.%(name)s-%(disk-name)s",
+                    tf.write('''        lxd_volume.%(name)s-%(disk-name)s,
 ''' % new_disk)
         tf.write('''    ]
 
@@ -235,7 +235,7 @@ users:
             auth_keys = []
 
         for key in auth_keys:
-            tf.write('''      - %(key)s
+            tf.write('''    - %(key)s
 ''' % dict(key=key))
 
         tf.write('''
@@ -284,7 +284,7 @@ config:
 
     tf.write('''
 locals {
-    numnodes = "${length(lxd_container.node.*.id)}"
+    numnodes = "length(lxd_container.node.*.id)"
 }
 
 resource "null_resource" "ansible" {
@@ -292,7 +292,7 @@ resource "null_resource" "ansible" {
 ''')
 
     for node in nodes:
-        tf.write('''        "lxd_container.%(name)s",
+        tf.write('''        lxd_container.%(name)s,
 ''' % node)
 
     tf.write('''    ]
@@ -304,8 +304,8 @@ resource "null_resource" "ansible" {
         connection {
             type        = "ssh"
             user        = "root"
-            private_key = "${file("cloudian-installation-key")}"
-            host        = "${lxd_container.%(name)s.ip_address}"
+            private_key = "file('cloudian-installation-key')"
+            host        = "lxd_container.%(name)s.ip_address"
         }
     }
 }
@@ -340,7 +340,7 @@ def write_disk(tf, node, disk):
     tf.write('''    device {
         name = "%(disk-name)s"
         type = "disk"
-        properties {
+        properties = {
             path   = "%(mount-point)s"
             source = "%(name)s-%(disk-name)s"
             pool   = "%(pool)s"
