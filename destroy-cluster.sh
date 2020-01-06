@@ -18,6 +18,7 @@ project=$1
 
 (
     cd $project
+
     terraform destroy -auto-approve .
     # this is generated, and next time we build this cluster, IPs will be different
     rm -f inventory-fixed.yaml
