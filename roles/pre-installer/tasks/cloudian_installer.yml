@@ -6,6 +6,7 @@
     src: "{{ role_path }}/files/CloudianHyperStore-{{ hyperstore_version }}.bin"
     local_follow: true  # just in case the local file is a symlink
     dest: "{{ staging_directory }}"
+    force: true
     mode: 0755
   when: not run_from_iso|bool
 
@@ -15,6 +16,7 @@
     src: "{{ role_path }}/files/cloudian_license.lic"
     dest: "{{ staging_directory }}"
     local_follow: true  # just in case the local file is a symlink
+    force: true
   when: not run_from_iso|bool
 
 - name: Extract Installer .bin
