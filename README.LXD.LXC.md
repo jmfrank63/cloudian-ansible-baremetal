@@ -23,7 +23,7 @@ Both versions should install LXD/LXC 3.x
 
 Initially there will be no network, so we just create one:
 
-    lxc network create lxcbr0 dns.mode=none raw.dnsmasq='dhcp-ignore-names'
+    lxc network create lxcbr0 dns.mode=none raw.dnsmasq="$(echo -e 'dhcp-ignore-names\nlocal-ttl=4938790\n')"
 
 This will create a bridge `lxcbr0` with an instance of `dnsmasq` that serves DNS and DHCP. The config
 options are so the DNS system does not reflect the node's names associated to the DHCP IP. In the future,
