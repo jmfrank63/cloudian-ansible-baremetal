@@ -3,10 +3,10 @@ digraph G {
 
     "main.yaml" -> { "cluster.yaml" "virt.yaml" } [ label = "split.py" ]
 
-    "cluster.yaml" -> { "inventory.yaml" "survey.csv"  "ansible.iso" }[ label = "cluster2cab.py" ]
+    "cluster.yaml" -> { "inventory.yaml" "survey.csv" "preseed.conf" "ansible.iso" }[ label = "cluster2cab.py" ]
     "inventory.yaml" -> "ansible.iso" [ label = "build-iso.sh" ]
 
-    { "virt.yaml" "env.yaml" } -> "main.tf" [ label = "virt2tf.py" ]
+    { "virt.yaml" "infra.yaml" } -> "main.tf" [ label = "virt2tf.py" ]
     "main.tf" -> { "lxd" "terraform.tfstate" } [ label = "terraform" ]
     { "inventory.yaml" "terraform.tfstate" } -> "inventory-fixed.yaml" [ label = "tf2cluster.py" ]
     "main.tf" -> { "authorized_keys" "provision iface config" "fix pam" "locale" "timezone" } [ label = "cloud-init" ]
