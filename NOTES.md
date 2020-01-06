@@ -32,7 +32,7 @@ of the nodes.
 Defines two groups of nodes, `installer-node` and `cloudian`. The first is one fo the `cloudian` nodes that
 also receives the installer, survey file and license.
 
-## installer-node
+## installer_node
 
 This group must include only the node declared as the installer node.
 
