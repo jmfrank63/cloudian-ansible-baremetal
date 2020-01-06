@@ -2,7 +2,7 @@
 pick==0.6.4
 
 # real dependency
-ansible==2.5.1
+ansible==2.9.2
 
 # the rest are transitive
 MarkupSafe==1.0

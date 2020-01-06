@@ -6,7 +6,7 @@
 # all configuration parameters can be overridden in Region or DC
 # order of precedence: cloudian < region < DC
 
-- hosts: installer-node
+- hosts: installer_node
   vars:
     # TODO: support the old schema and versioning on the command line
     hyperstore_version: "7.2"
