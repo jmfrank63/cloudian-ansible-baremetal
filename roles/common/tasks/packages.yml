@@ -17,12 +17,6 @@
 - name: Install Packages
   yum:
     name:
-      - which
-      - bridge-utils
-      - gdisk
       - vim-minimal
-      - nmap-ncat
       - sudo
-      - libsysfs
-      - openssl
-      - selinux-policy  # I hac issues with lxc containers
+      - selinux-policy  # solves issues with lxc containers
