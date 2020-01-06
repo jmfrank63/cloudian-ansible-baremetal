@@ -95,7 +95,7 @@ def main():
         sys.exit(1)
 
     # read the input
-    data = yaml.load(open(sys.argv[1]), Loader=yodl.Loader)
+    data = yaml.safe_load(open(sys.argv[1]))
 
     # TODO: validate
     # cluster is required

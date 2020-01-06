@@ -430,9 +430,9 @@ def main():
         sys.exit(1)
 
     # read the input
-    config = yaml.load(open(sys.argv[1]), Loader=yodl.Loader)
+    config = yaml.safe_load(open(sys.argv[1]))
     # pprint(config)
-    infra = yaml.load(open(sys.argv[2]), Loader=yodl.Loader)
+    infra = yaml.safe_load(open(sys.argv[2]))
 
     nodes = []
 

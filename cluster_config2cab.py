@@ -141,7 +141,7 @@ def main():
         print "Converts a cluster definition to several files: a survey file; a Cloudian Installer preseed; and an Ansible inventory."
         sys.exit(1)
 
-    input = yaml.load(open(sys.argv[1]))
+    input = yaml.safe_load(open(sys.argv[1]))
 
     # plan: I'm not aiming for purity, so we just generate a yaml inventory with
     # all the vars

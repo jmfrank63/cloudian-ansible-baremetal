@@ -19,7 +19,7 @@ def main ():
         sys.exit(1)
 
     terraform = json.load(open(sys.argv[2]))
-    cluster = yaml.load(open(sys.argv[1]))
+    cluster = yaml.safe_load(open(sys.argv[1]))
 
     tf_nodes = { name.replace('lxd_container.', ''): node
                  for name, node in terraform['modules'][0]['resources'].items() }
