@@ -18,5 +18,6 @@
   authorized_key:
     user: root
     state: present
+    # register up there encodes in base64; decode
     key: "{{ cloudian_installation_pub_key['content'] | b64decode }}"
   when: run_from_iso|bool
