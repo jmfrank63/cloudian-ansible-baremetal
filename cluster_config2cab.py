@@ -252,6 +252,7 @@ cloudian_s3_website_endpoint_region%(number)d=%(website-endpoint)s
 
                 if node.get('installer-node', False):
                     output['installer_node'] = { 'hosts': { node['name']: {} } }
+                    output['installer_node_2'] = { 'hosts': { node['name']: {} } }
 
                 if 'ipmi' in node_network_config:
                     output['all']['vars']['cfg_ipmi'] = True

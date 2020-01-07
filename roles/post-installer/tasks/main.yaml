@@ -1,0 +1,8 @@
+---
+
+- name: Run installer in batch mode
+  shell: "cd {{ staging_directory }}; ./cloudianInstall.sh -b -s survey.csv -c preseed.conf -k cloudian-installation-key force configure-dnsmasq"
+  args:
+    executable: /bin/bash
+    creates: "{{ staging_directory }}/CloudianInstallConfiguration.txt"
+  when: run_from_orch|bool
