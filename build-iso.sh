@@ -1,5 +1,10 @@
 #! /bin/bash
 
+if [ -z "$VIRTUAL_ENV" ]; then
+    echo "Virtual Env not active. Please run the following: source bin/activate"
+    exit 1
+fi
+
 set -eu
 
 ansible-playbook --syntax-check --inventory-file inventory/cluster.yaml deployCluster.yml
