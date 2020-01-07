@@ -33,7 +33,7 @@ sed -i -e 's/VIRTUAL_ENV=".*"/VIRTUAL_ENV="$(pwd)"/' bin/activate
 mkdir -pv tmp mnt
 
 # trim.sh is copied because it's run in the staging dir; it will removed later
-rsync --archive --update --delete \
+rsync --archive --update --delete --exclude '*terraform' \
     bin lib share group_vars inventory roles \
     deployCluster.yml run-from-iso.sh trim.sh \
     tmp/
