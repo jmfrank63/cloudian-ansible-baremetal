@@ -19,8 +19,9 @@ PUB_KEY=$(PROJECT_DIR)/cloudian-installation-key.pub
 
 
 all: $(INVENTORY) $(TF_FILE) \
-	$(PRV_KEY) $(PUB_KEY) \
-	cc.png
+	$(PRV_KEY) $(PUB_KEY)
+
+docs: cc.png
 
 $(CLUSTER) $(VIRT): $(MAIN) split.py
 	./split.py $(MAIN) $(CLUSTER) $(VIRT)
