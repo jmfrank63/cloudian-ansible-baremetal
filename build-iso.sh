@@ -70,5 +70,9 @@ done
         -volset-size 1 -volset-seqno 1 -rational-rock -joliet -joliet-long \
         -no-cache-inodes -full-iso9660-filenames -disable-deep-relocation -iso-level 3 \
         -input-charset utf-8 \
-        -o ../abi.iso .
+        -o "../${project}/abi.iso" .
+
+    echo
+    echo "ISO written to ${project}/abi.iso"
+    echo
 )
