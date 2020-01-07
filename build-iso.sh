@@ -7,7 +7,20 @@ fi
 
 set -eu
 
-ansible-playbook --syntax-check --inventory-file inventory/cluster.yaml deployCluster.yml
+if [ "$#" -lt 2 ]; then
+    echo "Usage: $0 [project]"
+    echo
+    echo "Builds an ISO to be mounted on each node via IPMI/BMC."
+    exit 1
+fi
+
+project="$1"
+shift
+
+# there's no need for infra here, and we're building files that don't need it
+make PROJECT_DIR="$project" INFRA="" "${project}/inventory.yaml"
+
+ansible-playbook --syntax-check --inventory-file "${project}/inventory.yaml" deployCluster.yml
 
 # ./check_config.py
 
