@@ -6,3 +6,9 @@
     executable: /bin/bash
     creates: "{{ staging_directory }}/CloudianInstallConfiguration.txt"
   when: run_from_orch|bool
+
+- name: Retrieve install log
+  fetch:
+    src:  "{{ staging_directory }}/CloudianInstallConfiguration.txt"
+    dest: "{{ project }}/"
+    flat: true
