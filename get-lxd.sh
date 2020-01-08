@@ -14,8 +14,10 @@ shift 2
 sudo yum install -y epel-release
 sudo yum install -y snapd
 # for some reason the service is not started, so do it by hand
-sudo systemctl enable snapd.service
-sudo systemctl start snapd.service
+sudo systemctl enable --now snapd.socket
+
+# this will be solved the next time the user logs in, altho we don't particularlly care
+export PATH=$PATH:/var/liv/snapd/snap/bin
 sudo snap install lxd
 
 # ip a | grep 'inet '
