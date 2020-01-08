@@ -13,7 +13,10 @@ shift 2
 
 sudo yum install -y epel-release
 sudo yum install -y snapd
-snap install lxd
+# for some reason the service is not started, so do it by hand
+sudo systemctl enable snapd.service
+sudo systemctl start snapd.service
+sudo snap install lxd
 
 # ip a | grep 'inet '
 
