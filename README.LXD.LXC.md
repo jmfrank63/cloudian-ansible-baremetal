@@ -1,8 +1,8 @@
 # LXD/LXC
 
 LXC is a container system built by Canonical. Initially it only worked on the local machine, but then
-Canonical developed LXD, which both an AIP and remote control. Confusingly, most control of both systems
-are handled by the `lxc` binary.
+Canonical developed LXD, which provides both an API and a remote control. Confusingly, most control of
+both systems are handled by the `lxc` binary.
 
 ## Install
 
@@ -29,6 +29,54 @@ This will create a bridge `lxcbr0` with an instance of `dnsmasq` that serves DNS
 options are so the DNS system does not reflect the node's names associated to the DHCP IP. In the future,
 networks (that we use as 'switches') will be provided per cluster, so several clusters can have similar
 IPs.
+
+
+## Terraform
+
+Install it by running:
+
+    ./get-terraform.sh
+
+
+## Python deps
+
+We will install several deps (including Ansible) in a Python VirtualEnd:
+
+    ./build-venv.sh
+
+
+## Configure
+
+The system tries to separate the definition of your cluster from the infrastructure that's going to
+support it.
+
+### Project
+
+The Terrible mode can handle different projects at the same time. Projects are directories under the
+`projects` directory. Usually the on;y file you need to modify in this directory is called `main.yaml`.
+This file declares your cluster and its relationship with the infra; we will talk about this in a
+moment. You can check the `demo3` project to have an idea of how to declare things, maybe use it as a
+template.
+
+### Infra
+
+You can declare existing infrastructure in a file under `infra`. Currently we only support
+`terraform-lxd` as backend. In that case, you have to configure at least one provider, one disk pool
+and the image to use as base for the HyperStore nodes. Please check `infra/ams.yaml` and
+`infra/nimbus.yaml` as examples. Notice that in the case of `nimbusyaml`, it makes reference to the
+bridge built up there.
+
+
+## Build
+
+Once you have your infra and project, you can proceed to build the cluster:
+
+    ./build-cluster.sh [project_dir] [infra] [hs_version]
+
+For example:
+
+    ./build-cluster.sh projects/demo3/ ams 7.2
+
 
 ## Specificities
 
