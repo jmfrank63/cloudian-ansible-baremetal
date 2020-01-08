@@ -20,7 +20,7 @@ sudo snap install lxd
 
 # ip a | grep 'inet '
 
-cat <<EOF | lxd init --preseed
+cat <<EOF | sudo lxd init --preseed
 config:
   core.https_address: ${ip}:8443
   core.trust_password: true
