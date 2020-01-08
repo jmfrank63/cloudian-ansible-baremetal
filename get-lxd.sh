@@ -18,9 +18,9 @@ sudo systemctl enable --now snapd.socket
 sudo snap install lxd
 
 # this should be solved the next time the user logs in, altho we don't particularlly care
-# export PATH=$PATH:/var/liv/snapd/snap/bin
+# export PATH=$PATH:/var/lib/snapd/snap/bin
 
-cat <<EOF | sudo /var/liv/snapd/snap/bin/lxd init --preseed
+cat <<EOF | sudo /var/lib/snapd/snap/bin/lxd init --preseed
 config:
   core.https_address: ${ip}:8443
   core.trust_password: true
