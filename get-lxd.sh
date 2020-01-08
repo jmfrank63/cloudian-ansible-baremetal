@@ -1,4 +1,4 @@
-#! bin/bash
+#! /bin/bash
 
 set -eu
 
@@ -11,8 +11,8 @@ ip=$1
 password=$2
 shift 2
 
-yum install epel-release
-yum install snapd
+sudo yum install -y epel-release
+sudo yum install -y snapd
 snap install lxd
 
 # ip a | grep 'inet '
