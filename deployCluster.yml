@@ -12,7 +12,6 @@
     hyperstore_release_version: "7.2"  # same as before, but without any RC tags
     staging_directory: "/opt/cloudian-staging/{{ hyperstore_release_version }}"
     installer_bin: "CloudianHyperStore-{{ hyperstore_version }}.bin"
-    install_log: "{{ staging_directory }}/cloudian-installation.log"
 
   roles:
     - pre-installer
@@ -35,6 +34,7 @@
     # TODO: support the old schema and versioning on the command line
     hyperstore_version: "7.2"
     staging_directory: "/opt/cloudian-staging/{{ hyperstore_release_version }}"
+    install_log: "{{ staging_directory }}/cloudian-installation.log"
 
   roles:
     - post-installer
