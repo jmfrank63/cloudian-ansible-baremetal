@@ -64,4 +64,4 @@ ssh-add "$project/cloudian-installation-key"
 # rewrite with the IPs offered via DHCP
 make PROJECT_DIR="$project" INFRA="$infra" "$project/inventory-fixed.yaml"
 
-./run-from-orch.sh "$project" "$hs_version"
+./run-from-orch.sh "$project" "$hs_version" "$@"

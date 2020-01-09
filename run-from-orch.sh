@@ -1,9 +1,20 @@
 #! /bin/bash
 
+if [ -z "$VIRTUAL_ENV" ]; then
+    echo "Virtual Env not active. Please run the following: source bin/activate"
+    exit 1
+fi
+
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    echo "Could not find a running ssh-agent, please run: ssh-agent bash"
+    echo "and try again."
+    exit 1
+fi
+
 set -eu
 
 if [ "$#" -lt 2 ]; then
-    echo "Usage: $0 [project] [hs_version]"
+    echo "Usage: $0 [project] [hs_version] [ansible_args ...]"
     echo
     echo "Executes Ansible in Orch(estrator) mode."
     exit 1
@@ -23,10 +34,8 @@ else
     hs_release_version="${hs_version}"
 fi
 
-# bin/activate references unbound variables
-set +u
-source bin/activate
-set -u
+# TODO: rm -f /opt/cloudian-staging/7.2/cloudian-installation.log /opt/cloudian-staging/7.2/CloudianInstallConfiguration.txt
+# for forece reinstall
 
 ./bin/ansible-playbook --extra-vars 'run_from_orch=true' --extra-vars 'run_from_iso=false' \
     --extra-vars "project=$project" --extra-vars "hyperstore_version=$hs_version" \
