@@ -15,7 +15,8 @@ shift 2
 
 # RCs get an RCxx tag in the bin file, but the staging directory and other do not cotain this
 # so have an extra variable with that cleaned up version
-if [[ "$hs_version" ~= "RC[0-9]+" ]]; then
+# NOTE: DO NOT try to quote the regexp
+if [[ "$hs_version" =~ RC[0-9]+ ]]; then
     # remove the RC tag
     hs_release_version="${hs_version%RC*}"
 else
