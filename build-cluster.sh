@@ -5,6 +5,12 @@ if [ -z "$VIRTUAL_ENV" ]; then
     exit 1
 fi
 
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    echo "Could not find a running ssh-agent, please run: ssh-agent bash"
+    echo "and try again."
+    exit 1
+fi
+
 set -eu
 
 if [ "$#" -lt 3 ]; then
