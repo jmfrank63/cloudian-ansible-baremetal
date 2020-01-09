@@ -4,11 +4,11 @@
   shell: "cd {{ staging_directory }}; ./cloudianInstall.sh -b -s survey.csv -c preseed.conf -k cloudian-installation-key force configure-dnsmasq"
   args:
     executable: /bin/bash
-    creates: "{{ staging_directory }}/CloudianInstallConfiguration.txt"
+    creates: "{{ install_log }}"
   when: run_from_orch|bool
 
 - name: Retrieve install log
   fetch:
-    src:  "{{ staging_directory }}/CloudianInstallConfiguration.txt"
+    src:  "{{ install_log }}"
     dest: "{{ project }}/"
     flat: true

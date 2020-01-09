@@ -3,7 +3,7 @@
 # NOTE: the installer .bin is expected to be present under ../files
 - name: Copy Cloudian HyperStore installer
   copy:
-    src: "{{ role_path }}/files/CloudianHyperStore-{{ hyperstore_version }}.bin"
+    src: "{{ role_path }}/files/{{ installer_bin }}"
     local_follow: true  # just in case the local file is a symlink
     dest: "{{ staging_directory }}"
     force: true
@@ -20,7 +20,7 @@
   when: not run_from_iso|bool
 
 - name: Extract Installer .bin
-  shell: "cd {{ staging_directory }} && ./CloudianHyperStore-{{ hyperstore_version }}.bin cloudian_license.lic"
+  shell: "cd {{ staging_directory }} && ./{{ installer_bin }} cloudian_license.lic"
   args:
     chdir: "{{ staging_directory }}"
     executable: /bin/bash
