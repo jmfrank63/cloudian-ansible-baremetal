@@ -21,6 +21,7 @@ fi
 project="$1"
 infra="$2"
 hs_version="$3"
+shift 3
 
 main_file="$project/main.yaml"
 

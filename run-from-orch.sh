@@ -40,4 +40,4 @@ fi
 ./bin/ansible-playbook --extra-vars 'run_from_orch=true' --extra-vars 'run_from_iso=false' \
     --extra-vars "project=$project" --extra-vars "hyperstore_version=$hs_version" \
     --extra-vars "hyperstore_release_version=$hs_release_version" \
-    --inventory-file "$project/inventory-fixed.yaml" --verbose deployCluster.yml "$@"
+    --inventory-file "$project/inventory-fixed.yaml" "$@" --verbose deployCluster.yml
