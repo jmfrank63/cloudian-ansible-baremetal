@@ -37,7 +37,17 @@ fi
 # TODO: rm -f /opt/cloudian-staging/7.2/cloudian-installation.log /opt/cloudian-staging/7.2/CloudianInstallConfiguration.txt
 # for forece reinstall
 
+# because we're creating and destroying nodes en masse, a new node having
+# the same IP as a previous node but different HOstKey is bound to happen
+
+# so we just use a discardbale known_hosts file
+
+# and we just discard it now
+rm --force "$project/know_hosts"
+
 ./bin/ansible-playbook --extra-vars 'run_from_orch=true' --extra-vars 'run_from_iso=false' \
     --extra-vars "project=$project" --extra-vars "hyperstore_version=$hs_version" \
     --extra-vars "hyperstore_release_version=$hs_release_version" \
-    --inventory-file "$project/inventory-fixed.yaml" "$@" --verbose deployCluster.yml
+    --inventory-file "$project/inventory-fixed.yaml" \
+    --ssh-common-args "-o ForwardAgent=yes -o UserKnownHostsFile=$project/know_hosts" \
+    "$@" --verbose deployCluster.yml
