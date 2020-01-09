@@ -10,8 +10,8 @@ For this we use Ansible, and some other deps. `sshpass`.
 
 # Usage
 
-* Copy the `.bin` and license files (as `cloudian_license.lic` in `roles/pre-installer/files`. If needed,
-also provide the `survey.csv` file.
+* Copy the `.bin` and license files (as `cloudian_license.lic` in `roles/pre-installer/files`.
+  If needed, also provide the `survey.csv` file.
 
 ## Inventory
 

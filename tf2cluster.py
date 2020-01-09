@@ -3,13 +3,13 @@
 # the good thing about standards...
 import json
 import yaml
+
 import sys
 
 # this tool fixes the ouput of cluster_config2tab.py
-# that tool can only assume the ansible_host is going to be the same as (one of)
-# the frontend interface(s), but our terraform+lxd system add an interface which
+# that tool can only assume that ansible_host is going to be the same as (one of)
+# the frontend interface(s), but our terraform+lxd system adds an interface which
 # gets a random IP via DHCP, so we read the terraform state file and fix that
-
 
 def main ():
     if len(sys.argv) != 4:

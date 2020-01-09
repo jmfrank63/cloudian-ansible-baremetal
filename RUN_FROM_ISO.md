@@ -19,10 +19,9 @@ Please build this in a system similar as the target one, f.i., CentOS7.
 * Run `./build-venv.sh` to crate a Python virtaulenv with all the dependencies.
 * `source bin/activate`
 
-* Edit `inventory/cluster.yaml` to suit your needs.
-* Edit `roles/pre-install/files/survey.csv` according to the previous file. (TODO: this file should be generated)
-* Run `./build-iso.sh`
-  * This creates a file called `abi.iso`
+* Edit `projects/[project]/main.yaml` to suit your needs.
+* Run `./build-iso.sh projects/[project]`
+  * This creates a file called `projects/[project]/abi.iso`
 
 * Mount `abi.iso` on each node through the Virtual Device support of your node's
   IPMI/BMC implementation.

@@ -50,6 +50,14 @@ We will install several deps (including Ansible) in a Python VirtualEnd:
 The system tries to separate the definition of your cluster from the infrastructure that's going to
 support it.
 
+### Infra
+
+You can declare existing infrastructure in a file under `infra`. Currently we only support
+`terraform-lxd` as backend. In that case, you have to configure at least one provider, one disk pool
+and the image to use as base for the HyperStore nodes. Please check `infra/ams.yaml` and
+`infra/nimbus.yaml` as examples. Notice that in the case of `nimbus.yaml`, it makes reference to the
+`lxc network` we built up there.
+
 ### Project
 
 The Terrible mode can handle different projects at the same time. Projects are directories under the
@@ -58,14 +66,16 @@ This file declares your cluster and its relationship with the infra; we will tal
 moment. You can check the `demo3` project to have an idea of how to declare things, maybe use it as a
 template.
 
-### Infra
+The only point where the separation between project and infra fails is when declaring a
+`data-center`. In demo3's example:
 
-You can declare existing infrastructure in a file under `infra`. Currently we only support
-`terraform-lxd` as backend. In that case, you have to configure at least one provider, one disk pool
-and the image to use as base for the HyperStore nodes. Please check `infra/ams.yaml` and
-`infra/nimbus.yaml` as examples. Notice that in the case of `nimbusyaml`, it makes reference to the
-bridge built up there.
+        data-centers:
+        - name: DC10
+          container-config:
+            # this defines which LXD host will hold this DC. please modify
+            host: nimbus
 
+We plan to get rid of this too.
 
 ## Build
 

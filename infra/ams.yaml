@@ -1,6 +1,6 @@
 # kate: indent-width 2;
 
-# this si the backend we're going to use
+# this is the backend we're going to use
 backend: terraform-lxd
 
 # everything from here is backend specific
