@@ -260,7 +260,7 @@ cloudian_s3_website_endpoint_region%(number)d=%(website-endpoint)s
                 csv_rows.append([ region['name'], node['name'], node_info['net_frontend_addr'], dc_name, dc_name,
                                   node_info['backend_iface'] ])
 
-        output['cloudian']['children'][dc_name] = dc
+            output['cloudian']['children'][dc_name] = dc
 
     open(sys.argv[4], 'w+').write(yaml.dump(output, default_flow_style=False))
     # TODO: support project directories
